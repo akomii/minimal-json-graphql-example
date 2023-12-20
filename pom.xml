@@ -69,5 +69,24 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-</project>
 
+  <build>
+    <plugins>
+      <plugin>
+        <!-- Deploy application local in pre-configured server -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>org.example.graphql.server.MyApp</mainClass>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
