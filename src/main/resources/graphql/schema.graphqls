@@ -13,10 +13,10 @@ type Book {
 }
 
 type Query {
-    authors: [Author]
     author(id: ID!): Author
-    books: [Book]
+    authors: [Author]
     book(id: ID!): Book
+    books: [Book]
 }
 
 type Mutation {
