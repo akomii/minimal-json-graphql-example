@@ -45,11 +45,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
-    <!-- Spring Boot Starter for Thymeleaf (Template Engine) -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-thymeleaf</artifactId>
-    </dependency>
     <!-- Embedded Redis server for testing and development -->
     <dependency>
       <groupId>org.redisson</groupId>
