@@ -28,14 +28,11 @@ import java.util.Arrays;
 import java.util.List;
 import org.example.grahql.server.models.Author;
 import org.example.grahql.server.models.Book;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BasicRepository {
 
-  private static final Logger log = LoggerFactory.getLogger(BasicRepository.class);
 
   private static final List<Author> authors = Arrays.asList(
       new Author(1, "Joshua", "Bloch"),
@@ -50,18 +47,14 @@ public class BasicRepository {
   );
 
   public Book getBook(int id) {
-    log.info("Fetching book with id: {}", id);
     return books.stream().filter(b -> b.getId() == id).findFirst().orElse(null);
   }
 
   public List<Book> getBooks() {
-    log.info("Fetching all books");
     return books;
   }
 
   public void createBook(String title, int publishedYear, int authorId) {
-    log.info("Creating book with title: {}, publishedYear: {}, and authorId: {}",
-        title, publishedYear, authorId);
     Author author = authors.stream().filter(a -> a.getId() == authorId).findFirst().orElse(null);
     if (author == null) {
       throw new IllegalArgumentException("Author not found");
@@ -71,17 +64,14 @@ public class BasicRepository {
   }
 
   public Author getAuthor(int id) {
-    log.info("Fetching author with id: {}", id);
     return authors.stream().filter(u -> u.getId() == id).findFirst().orElse(null);
   }
 
   public List<Author> getAuthors() {
-    log.info("Fetching all authors");
     return authors;
   }
 
   public void createAuthor(String firstName, String lastName) {
-    log.info("Creating author with firstName: {} and lastName: {}", firstName, lastName);
     Author author = new Author(authors.size() + 1, firstName, lastName);
     authors.add(author);
   }
