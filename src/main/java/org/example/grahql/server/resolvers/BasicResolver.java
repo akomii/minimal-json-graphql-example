@@ -59,9 +59,9 @@ public class BasicResolver {
   }
 
   @MutationMapping
-  public void createAuthor(@Argument String firstName, @Argument String lastName) {
+  public Author createAuthor(@Argument String firstName, @Argument String lastName) {
     log.info("Creating author with firstName: {} and lastName: {}", firstName, lastName);
-    repository.createAuthor(firstName, lastName);
+    return repository.createAuthor(firstName, lastName);
   }
 
   @QueryMapping
@@ -77,10 +77,10 @@ public class BasicResolver {
   }
 
   @MutationMapping
-  public void createBook(@Argument String title, @Argument int publishedYear,
+  public Book createBook(@Argument String title, @Argument int publishedYear,
       @Argument int authorId) {
     log.info("Creating book with title: {}, publishedYear: {}, and authorId: {}",
         title, publishedYear, authorId);
-    repository.createBook(title, publishedYear, authorId);
+    return repository.createBook(title, publishedYear, authorId);
   }
 }

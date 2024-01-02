@@ -24,6 +24,7 @@
 
 package org.example.grahql.server.persistence;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.example.grahql.server.models.Author;
@@ -34,17 +35,17 @@ import org.springframework.stereotype.Service;
 public class BasicRepository {
 
 
-  private static final List<Author> authors = Arrays.asList(
+  private static final List<Author> authors = new ArrayList<>(Arrays.asList(
       new Author(1, "Joshua", "Bloch"),
       new Author(2, "Douglas", "Adams"),
       new Author(3, "Bill", "Bryson")
-  );
+  ));
 
-  private static final List<Book> books = Arrays.asList(
+  private static final List<Book> books = new ArrayList<>(Arrays.asList(
       new Book(1, "Effective Java", 2017, authors.get(0)),
       new Book(2, "Hitchhiker's Guide to the Galaxy", 1979, authors.get(1)),
       new Book(3, "Down Under", 2000, authors.get(2))
-  );
+  ));
 
   public Book getBook(int id) {
     return books.stream().filter(b -> b.getId() == id).findFirst().orElse(null);
@@ -54,13 +55,14 @@ public class BasicRepository {
     return books;
   }
 
-  public void createBook(String title, int publishedYear, int authorId) {
+  public Book createBook(String title, int publishedYear, int authorId) {
     Author author = authors.stream().filter(a -> a.getId() == authorId).findFirst().orElse(null);
     if (author == null) {
       throw new IllegalArgumentException("Author not found");
     }
     Book book = new Book(books.size() + 1, title, publishedYear, author);
     books.add(book);
+    return book;
   }
 
   public Author getAuthor(int id) {
@@ -71,8 +73,9 @@ public class BasicRepository {
     return authors;
   }
 
-  public void createAuthor(String firstName, String lastName) {
+  public Author createAuthor(String firstName, String lastName) {
     Author author = new Author(authors.size() + 1, firstName, lastName);
     authors.add(author);
+    return author;
   }
 }
