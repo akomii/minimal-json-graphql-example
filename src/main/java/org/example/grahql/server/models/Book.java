@@ -40,7 +40,7 @@ public class Book {
 
   int id;
 
-  String name;
+  String title;
 
   int publishedYear;
 
