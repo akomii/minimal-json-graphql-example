@@ -47,6 +47,20 @@ public class BasicRepository {
       new Book(3, "Down Under", 2000, authors.get(2))
   ));
 
+  public Author getAuthor(int id) {
+    return authors.stream().filter(u -> u.getId() == id).findFirst().orElse(null);
+  }
+
+  public List<Author> getAuthors() {
+    return authors;
+  }
+
+  public Author createAuthor(String firstName, String lastName) {
+    Author author = new Author(authors.size() + 1, firstName, lastName);
+    authors.add(author);
+    return author;
+  }
+
   public Book getBook(int id) {
     return books.stream().filter(b -> b.getId() == id).findFirst().orElse(null);
   }
@@ -63,19 +77,5 @@ public class BasicRepository {
     Book book = new Book(books.size() + 1, title, publishedYear, author);
     books.add(book);
     return book;
-  }
-
-  public Author getAuthor(int id) {
-    return authors.stream().filter(u -> u.getId() == id).findFirst().orElse(null);
-  }
-
-  public List<Author> getAuthors() {
-    return authors;
-  }
-
-  public Author createAuthor(String firstName, String lastName) {
-    Author author = new Author(authors.size() + 1, firstName, lastName);
-    authors.add(author);
-    return author;
   }
 }
