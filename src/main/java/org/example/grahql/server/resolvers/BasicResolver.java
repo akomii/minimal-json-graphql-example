@@ -24,12 +24,13 @@
 
 package org.example.grahql.server.resolvers;
 
-import java.util.List;
 import org.example.grahql.server.models.Author;
 import org.example.grahql.server.models.Book;
-import org.example.grahql.server.persistence.BasicRepository;
+import org.example.grahql.server.persistence.AuthorRepository;
+import org.example.grahql.server.persistence.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -40,40 +41,47 @@ public class BasicResolver {
 
   private static final Logger log = LoggerFactory.getLogger(BasicResolver.class);
 
-  private final BasicRepository repository;
+  private final AuthorRepository authorRepository;
 
-  public BasicResolver(BasicRepository repository) {
-    this.repository = repository;
+  private final BookRepository bookRepository;
+
+  @Autowired
+  public BasicResolver(AuthorRepository authorRepository, BookRepository bookRepository) {
+    this.authorRepository = authorRepository;
+    this.bookRepository = bookRepository;
   }
 
   @QueryMapping
   public Author authorById(@Argument int id) {
     log.info("Fetching author with id: {}", id);
-    return repository.getAuthor(id);
+    return authorRepository.findById(id).orElse(null);
   }
 
   @QueryMapping
-  public List<Author> authors() {
+  public Iterable<Author> authors() {
     log.info("Fetching all authors");
-    return repository.getAuthors();
+    return authorRepository.findAll();
   }
 
   @MutationMapping
   public Author createAuthor(@Argument String firstName, @Argument String lastName) {
     log.info("Creating author with firstName: {} and lastName: {}", firstName, lastName);
-    return repository.createAuthor(firstName, lastName);
+    Author newAuthor = new Author();
+    newAuthor.setFirstName(firstName);
+    newAuthor.setLastName(lastName);
+    return authorRepository.save(newAuthor);
   }
 
   @QueryMapping
   public Book bookById(@Argument int id) {
     log.info("Fetching book with id: {}", id);
-    return repository.getBook(id);
+    return bookRepository.findById(id).orElse(null);
   }
 
   @QueryMapping
-  public List<Book> books() {
+  public Iterable<Book> books() {
     log.info("Fetching all books");
-    return repository.getBooks();
+    return bookRepository.findAll();
   }
 
   @MutationMapping
@@ -81,6 +89,11 @@ public class BasicResolver {
       @Argument int authorId) {
     log.info("Creating book with title: {}, publishedYear: {}, and authorId: {}",
         title, publishedYear, authorId);
-    return repository.createBook(title, publishedYear, authorId);
+    Author author = this.authorById(authorId);
+    Book newBook = new Book();
+    newBook.setTitle(title);
+    newBook.setPublishedYear(publishedYear);
+    newBook.setAuthor(author);
+    return bookRepository.save(newBook);
   }
 }

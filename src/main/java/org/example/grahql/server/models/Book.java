@@ -30,7 +30,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Reference;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
+@RedisHash("book")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -38,11 +43,14 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Book {
 
-  int id;
+  @Id
+  Integer id;
 
   String title;
 
   int publishedYear;
 
+  @Indexed
+  @Reference
   Author author;
 }

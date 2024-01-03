@@ -22,29 +22,11 @@
  * SOFTWARE.
  */
 
-package org.example.grahql.server.models;
+package org.example.grahql.server.persistence;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
+import org.example.grahql.server.models.Book;
+import org.springframework.data.repository.CrudRepository;
 
-@RedisHash("author")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Author {
+public interface BookRepository extends CrudRepository<Book, Integer> {
 
-  @Id
-  Integer id;
-
-  String firstName;
-
-  String lastName;
 }
