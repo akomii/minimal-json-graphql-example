@@ -24,6 +24,8 @@
 
 package org.example.grahql.server.models;
 
+import java.io.Serial;
+import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,7 +41,10 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Author {
+public class Author implements Serializable {
+
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Id
   Integer id;

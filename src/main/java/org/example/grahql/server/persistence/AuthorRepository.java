@@ -25,8 +25,10 @@
 package org.example.grahql.server.persistence;
 
 import org.example.grahql.server.models.Author;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.keyvalue.repository.KeyValueRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AuthorRepository extends CrudRepository<Author, Integer> {
+@Repository
+public interface AuthorRepository extends KeyValueRepository<Author, Integer> {
 
 }

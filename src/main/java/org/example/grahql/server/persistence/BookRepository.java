@@ -25,8 +25,10 @@
 package org.example.grahql.server.persistence;
 
 import org.example.grahql.server.models.Book;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.keyvalue.repository.KeyValueRepository;
+import org.springframework.stereotype.Repository;
 
-public interface BookRepository extends CrudRepository<Book, Integer> {
+@Repository
+public interface BookRepository extends KeyValueRepository<Book, Integer> {
 
 }
