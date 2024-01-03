@@ -47,7 +47,7 @@ public class BasicResolver {
   }
 
   @QueryMapping
-  public Author author(@Argument int id) {
+  public Author authorById(@Argument int id) {
     log.info("Fetching author with id: {}", id);
     return repository.getAuthor(id);
   }
@@ -65,7 +65,7 @@ public class BasicResolver {
   }
 
   @QueryMapping
-  public Book book(@Argument int id) {
+  public Book bookById(@Argument int id) {
     log.info("Fetching book with id: {}", id);
     return repository.getBook(id);
   }
