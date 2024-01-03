@@ -26,7 +26,6 @@ package org.example.grahql.server.resolvers;
 
 import org.example.grahql.server.models.Author;
 import org.example.grahql.server.models.Book;
-import org.example.grahql.server.persistence.AuthorRepository;
 import org.example.grahql.server.persistence.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,39 +36,18 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class BasicResolver {
+public class BookResolver {
 
-  private static final Logger log = LoggerFactory.getLogger(BasicResolver.class);
-
-  private final AuthorRepository authorRepository;
+  private static final Logger log = LoggerFactory.getLogger(BookResolver.class);
 
   private final BookRepository bookRepository;
 
+  private final AuthorResolver authorResolver;
+
   @Autowired
-  public BasicResolver(AuthorRepository authorRepository, BookRepository bookRepository) {
-    this.authorRepository = authorRepository;
+  public BookResolver(BookRepository bookRepository, AuthorResolver authorResolver) {
     this.bookRepository = bookRepository;
-  }
-
-  @QueryMapping
-  public Author authorById(@Argument int id) {
-    log.info("Fetching author with id: {}", id);
-    return authorRepository.findById(id).orElse(null);
-  }
-
-  @QueryMapping
-  public Iterable<Author> authors() {
-    log.info("Fetching all authors");
-    return authorRepository.findAll();
-  }
-
-  @MutationMapping
-  public Author createAuthor(@Argument String firstName, @Argument String lastName) {
-    log.info("Creating author with firstName: {} and lastName: {}", firstName, lastName);
-    Author newAuthor = new Author();
-    newAuthor.setFirstName(firstName);
-    newAuthor.setLastName(lastName);
-    return authorRepository.save(newAuthor);
+    this.authorResolver = authorResolver;
   }
 
   @QueryMapping
@@ -89,7 +67,7 @@ public class BasicResolver {
       @Argument int authorId) {
     log.info("Creating book with title: {}, publishedYear: {}, and authorId: {}",
         title, publishedYear, authorId);
-    Author author = this.authorById(authorId);
+    Author author = this.authorResolver.authorById(authorId);
     Book newBook = new Book();
     newBook.setTitle(title);
     newBook.setPublishedYear(publishedYear);
