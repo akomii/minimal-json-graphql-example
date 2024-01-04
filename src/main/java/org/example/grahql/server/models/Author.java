@@ -37,6 +37,20 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+/**
+ * Represents an author in the book store.
+ * <p>
+ * This class is a part of the domain model and it is stored in a Redis hash. Each instance of this
+ * class corresponds to a single author.
+ * <p>
+ * This class is serializable, which allows it to be stored in Redis. It also includes a no-args
+ * constructor and a constructor that takes all fields as arguments, getters and setters for all
+ * fields, and a list of IDs of published books.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 04-01-2024
+ */
 @RedisHash("author")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,9 +59,15 @@ import org.springframework.data.redis.core.RedisHash;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Author implements Serializable {
 
+  /**
+   * The unique identifier for the serialized class.
+   */
   @Serial
   private static final long serialVersionUID = 1L;
 
+  /**
+   * The unique identifier for the author.
+   */
   @Id
   Long id;
 

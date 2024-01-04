@@ -37,6 +37,20 @@ import org.springframework.data.annotation.Reference;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
+/**
+ * Represents a book in the book store.
+ * <p>
+ * This class is a part of the domain model and it is stored in a Redis hash. Each instance of this
+ * class corresponds to a single book.
+ * <p>
+ * This class is serializable, which allows it to be stored in Redis. It also includes a no-args
+ * constructor and a constructor that takes all fields as arguments, getters and setters for all
+ * fields, and a reference to the author of the book.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 04-01-2024
+ */
 @RedisHash("book")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,9 +59,15 @@ import org.springframework.data.redis.core.index.Indexed;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Book implements Serializable {
 
+  /**
+   * The unique identifier for the serialized class.
+   */
   @Serial
   private static final long serialVersionUID = 1L;
 
+  /**
+   * The unique identifier for the book.
+   */
   @Id
   Long id;
 
@@ -55,6 +75,16 @@ public class Book implements Serializable {
 
   int publishedYear;
 
+  /**
+   * The author of the book.
+   * <p>
+   * The {@link org.springframework.data.redis.core.index.Indexed} annotation indicates that this
+   * field should be indexed, which allows for efficient searching and querying in Redis.
+   * <p>
+   * The {@link org.springframework.data.annotation.Reference} annotation indicates that this field
+   * is a reference to another domain object. This is used in the context of Redis to store a
+   * reference to the Author object associated with this book.
+   */
   @Indexed
   @Reference
   Author author;

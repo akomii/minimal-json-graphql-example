@@ -29,20 +29,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * <p>The MyApp class is the entry point for the Spring Boot application. It uses the
- * SpringBootApplication annotation, which is a convenience annotation that adds all of the
- * following:</p>
+ * {@link org.springframework.boot.autoconfigure.SpringBootApplication} annotation, which is a
+ * convenience annotation that adds all of the following:</p>
  * <ul>
- * <li>@Configuration: Tags the class as a source of bean definitions for the application
+ * <li>{@link org.springframework.context.annotation.Configuration}: Tags the class as a source of bean definitions for the application
  * context.</li>
- * <li>@EnableAutoConfiguration: Tells Spring Boot to start adding beans based on classpath
+ * <li>{@link org.springframework.boot.autoconfigure.EnableAutoConfiguration}: Tells Spring Boot to start adding beans based on classpath
  * settings, other beans, and various property settings.</li>
- * <li>@ComponentScan: Tells Spring to look for other components, configurations, and services in
+ * <li>{@link org.springframework.context.annotation.ComponentScan}: Tells Spring to look for other components, configurations, and services in
  * the 'com/example' package, allowing it to find and register the controllers.</li>
  * </ul>
  *
  * @author Alexander Kombeiz
  * @version 1.0
- * @see SpringApplication
  * @since 20-12-2023
  */
 @SpringBootApplication

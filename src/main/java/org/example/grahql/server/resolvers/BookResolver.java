@@ -37,6 +37,22 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Controller class for handling GraphQL queries and mutations related to {@link Book} instances.
+ * <p>
+ * This class uses the {@link org.springframework.stereotype.Controller} annotation to indicate that
+ * it's a controller. It also uses the
+ * {@link org.springframework.graphql.data.method.annotation.QueryMapping} and
+ * {@link org.springframework.graphql.data.method.annotation.MutationMapping} annotations to map
+ * GraphQL queries and mutations to methods.
+ * <p>
+ * The {@link org.springframework.beans.factory.annotation.Autowired} annotation is used to inject
+ * dependencies.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 04-01-2024
+ */
 @Controller
 public class BookResolver {
 
@@ -46,24 +62,49 @@ public class BookResolver {
 
   private final AuthorRepository authorRepository;
 
+  /**
+   * Constructs a new BookResolver with the given repositories.
+   *
+   * @param bookRepository   the repository for accessing books.
+   * @param authorRepository the repository for accessing authors.
+   */
   @Autowired
   public BookResolver(BookRepository bookRepository, AuthorRepository authorRepository) {
     this.bookRepository = bookRepository;
     this.authorRepository = authorRepository;
   }
 
+  /**
+   * Fetches a book by its ID.
+   *
+   * @param id the ID of the book to fetch.
+   * @return the book with the given ID, or null if no such book exists.
+   */
   @QueryMapping
   public Book bookById(@Argument Long id) {
     log.info("Fetching book with id: {}", id);
     return bookRepository.findById(id).orElse(null);
   }
 
+  /**
+   * Fetches all books.
+   *
+   * @return an iterable of all books.
+   */
   @QueryMapping
   public Iterable<Book> books() {
     log.info("Fetching all books");
     return bookRepository.findAll();
   }
 
+  /**
+   * Creates a new book.
+   *
+   * @param title         the title of the book to create.
+   * @param publishedYear the year the book was published.
+   * @param authorId      the ID of the author of the book to create.
+   * @return the created book, or null if the author does not exist.
+   */
   @MutationMapping
   public Book createBook(@Argument String title, @Argument int publishedYear,
       @Argument Long authorId) {
@@ -85,6 +126,12 @@ public class BookResolver {
     }
   }
 
+  /**
+   * Deletes a book by its ID.
+   *
+   * @param id the ID of the book to delete.
+   * @return true if the book was deleted, false otherwise.
+   */
   @MutationMapping
   public Boolean deleteBook(@Argument Long id) {
     log.info("Deleting book with id: {}", id);

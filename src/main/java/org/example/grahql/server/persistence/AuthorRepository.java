@@ -28,6 +28,20 @@ import org.example.grahql.server.models.Author;
 import org.springframework.data.keyvalue.repository.KeyValueRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Repository interface for {@link Author} instances.
+ * <p>
+ * This interface extends {@link org.springframework.data.keyvalue.repository.KeyValueRepository},
+ * which provides methods for CRUD operations on {@link Author} instances stored in a key-value
+ * store.
+ * <p>
+ * The {@link org.springframework.stereotype.Repository} annotation indicates that this interface is
+ * a repository. Spring will detect this interface and create a proxy implementation at runtime.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 04-01-2024
+ */
 @Repository
 public interface AuthorRepository extends KeyValueRepository<Author, Long> {
 

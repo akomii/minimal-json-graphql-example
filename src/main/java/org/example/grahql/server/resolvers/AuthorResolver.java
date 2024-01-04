@@ -37,6 +37,22 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Controller class for handling GraphQL queries and mutations related to {@link Author} instances.
+ * <p>
+ * This class uses the {@link org.springframework.stereotype.Controller} annotation to indicate that
+ * it's a controller. It also uses the
+ * {@link org.springframework.graphql.data.method.annotation.QueryMapping} and
+ * {@link org.springframework.graphql.data.method.annotation.MutationMapping} annotations to map
+ * GraphQL queries and mutations to methods.
+ * <p>
+ * The {@link org.springframework.beans.factory.annotation.Autowired} annotation is used to inject
+ * dependencies.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 04-01-2024
+ */
 @Controller
 public class AuthorResolver {
 
@@ -46,24 +62,49 @@ public class AuthorResolver {
 
   private final BookRepository bookRepository;
 
+  /**
+   * Constructs a new AuthorResolver with the given repositories.
+   *
+   * @param authorRepository the repository for accessing authors.
+   * @param bookRepository   the repository for accessing books.
+   */
   @Autowired
   public AuthorResolver(AuthorRepository authorRepository, BookRepository bookRepository) {
     this.authorRepository = authorRepository;
     this.bookRepository = bookRepository;
   }
 
+  /**
+   * Fetches an author by their ID.
+   *
+   * @param id the ID of the author to fetch.
+   * @return the author with the given ID, or null if no such author exists.
+   */
   @QueryMapping
   public Author authorById(@Argument Long id) {
     log.info("Fetching author with id: {}", id);
     return authorRepository.findById(id).orElse(null);
   }
 
+  /**
+   * Fetches all authors.
+   *
+   * @return an iterable of all authors.
+   */
   @QueryMapping
   public Iterable<Author> authors() {
     log.info("Fetching all authors");
     return authorRepository.findAll();
   }
 
+  /**
+   * Creates a new author.
+   *
+   * @param firstName the first name of the author to create.
+   * @param lastName  the last name of the author to create.
+   * @param bookIds   the IDs of the books published by the author to create.
+   * @return the created author.
+   */
   @MutationMapping
   public Author createAuthor(
       @Argument String firstName,
@@ -78,6 +119,12 @@ public class AuthorResolver {
     return authorRepository.save(newAuthor);
   }
 
+  /**
+   * Deletes an author by their ID.
+   *
+   * @param id the ID of the author to delete.
+   * @return true if the author was deleted, false otherwise.
+   */
   @MutationMapping
   public Boolean deleteAuthor(@Argument Long id) {
     log.info("Deleting author with id: {}", id);
