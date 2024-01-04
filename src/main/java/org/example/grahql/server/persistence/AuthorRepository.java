@@ -29,6 +29,6 @@ import org.springframework.data.keyvalue.repository.KeyValueRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthorRepository extends KeyValueRepository<Author, Integer> {
+public interface AuthorRepository extends KeyValueRepository<Author, Long> {
 
 }
