@@ -24,8 +24,11 @@
 
 package org.example.grahql.server.resolvers;
 
+import java.util.List;
+import java.util.Optional;
 import org.example.grahql.server.models.Author;
 import org.example.grahql.server.persistence.AuthorRepository;
+import org.example.grahql.server.persistence.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +44,16 @@ public class AuthorResolver {
 
   private final AuthorRepository authorRepository;
 
+  private final BookRepository bookRepository;
+
   @Autowired
-  public AuthorResolver(AuthorRepository authorRepository) {
+  public AuthorResolver(AuthorRepository authorRepository, BookRepository bookRepository) {
     this.authorRepository = authorRepository;
+    this.bookRepository = bookRepository;
   }
 
   @QueryMapping
-  public Author authorById(@Argument int id) {
+  public Author authorById(@Argument Long id) {
     log.info("Fetching author with id: {}", id);
     return authorRepository.findById(id).orElse(null);
   }
@@ -59,11 +65,34 @@ public class AuthorResolver {
   }
 
   @MutationMapping
-  public Author createAuthor(@Argument String firstName, @Argument String lastName) {
-    log.info("Creating author with firstName: {} and lastName: {}", firstName, lastName);
+  public Author createAuthor(
+      @Argument String firstName,
+      @Argument String lastName,
+      @Argument List<Long> bookIds) {
+    log.info("Creating author with firstName: {} and lastName: {} and bookIds: {}",
+        firstName, lastName, bookIds);
     Author newAuthor = new Author();
     newAuthor.setFirstName(firstName);
     newAuthor.setLastName(lastName);
+    newAuthor.setPublishedBookIds(bookIds);
     return authorRepository.save(newAuthor);
+  }
+
+  @MutationMapping
+  public Boolean deleteAuthor(@Argument Long id) {
+    log.info("Deleting author with id: {}", id);
+    Optional<Author> authorOptional = authorRepository.findById(id);
+    if (authorOptional.isPresent()) {
+      Author author = authorOptional.get();
+      author.getPublishedBookIds().forEach(bookId -> {
+        log.info("Deleting book with id: {} associated with author id: {}", bookId, id);
+        bookRepository.deleteById(bookId);
+      });
+      authorRepository.delete(author);
+      return true;
+    } else {
+      log.warn("Author with id {} not found.", id);
+      return false;
+    }
   }
 }

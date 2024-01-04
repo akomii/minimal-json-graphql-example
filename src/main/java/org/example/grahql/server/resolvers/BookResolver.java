@@ -24,8 +24,10 @@
 
 package org.example.grahql.server.resolvers;
 
+import java.util.Optional;
 import org.example.grahql.server.models.Author;
 import org.example.grahql.server.models.Book;
+import org.example.grahql.server.persistence.AuthorRepository;
 import org.example.grahql.server.persistence.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,16 +44,16 @@ public class BookResolver {
 
   private final BookRepository bookRepository;
 
-  private final AuthorResolver authorResolver;
+  private final AuthorRepository authorRepository;
 
   @Autowired
-  public BookResolver(BookRepository bookRepository, AuthorResolver authorResolver) {
+  public BookResolver(BookRepository bookRepository, AuthorRepository authorRepository) {
     this.bookRepository = bookRepository;
-    this.authorResolver = authorResolver;
+    this.authorRepository = authorRepository;
   }
 
   @QueryMapping
-  public Book bookById(@Argument int id) {
+  public Book bookById(@Argument Long id) {
     log.info("Fetching book with id: {}", id);
     return bookRepository.findById(id).orElse(null);
   }
@@ -64,14 +66,42 @@ public class BookResolver {
 
   @MutationMapping
   public Book createBook(@Argument String title, @Argument int publishedYear,
-      @Argument int authorId) {
+      @Argument Long authorId) {
     log.info("Creating book with title: {}, publishedYear: {}, and authorId: {}",
         title, publishedYear, authorId);
-    Author author = this.authorResolver.authorById(authorId);
-    Book newBook = new Book();
-    newBook.setTitle(title);
-    newBook.setPublishedYear(publishedYear);
-    newBook.setAuthor(author);
-    return bookRepository.save(newBook);
+    Author author = authorRepository.findById(authorId).orElse(null);
+    if (author != null) {
+      Book newBook = new Book();
+      newBook.setTitle(title);
+      newBook.setPublishedYear(publishedYear);
+      newBook.setAuthor(author);
+      Book savedBook = bookRepository.save(newBook);
+      author.getPublishedBookIds().add(savedBook.getId());
+      authorRepository.save(author);
+      return savedBook;
+    } else {
+      log.warn("Author with id {} not found. Cannot create book.", authorId);
+      return null;
+    }
+  }
+
+  @MutationMapping
+  public Boolean deleteBook(@Argument Long id) {
+    log.info("Deleting book with id: {}", id);
+    Optional<Book> bookOptional = bookRepository.findById(id);
+    if (bookOptional.isPresent()) {
+      Book book = bookOptional.get();
+      Author author = book.getAuthor();
+      if (author != null) {
+        log.info("Removing book with id: {} from author with id: {}", id, author.getId());
+        author.getPublishedBookIds().remove(id);
+        authorRepository.save(author);
+      }
+      bookRepository.delete(book);
+      return true;
+    } else {
+      log.warn("Book with id {} not found.", id);
+      return false;
+    }
   }
 }
