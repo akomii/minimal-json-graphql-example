@@ -26,6 +26,8 @@ package org.example.grahql.server.models;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,9 +49,11 @@ public class Author implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  Integer id;
+  Long id;
 
   String firstName;
 
   String lastName;
+
+  List<Long> publishedBookIds = new ArrayList<>();
 }

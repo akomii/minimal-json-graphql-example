@@ -49,7 +49,7 @@ public class Book implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  Integer id;
+  Long id;
 
   String title;
 
