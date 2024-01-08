@@ -11,6 +11,7 @@
 
   <modules>
     <module>server</module>
+    <module>redis</module>
   </modules>
 
   <parent>
@@ -50,6 +51,15 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- GraphQL Testing: Library for testing GraphQL APIs in Spring applications.
+     It provides utilities for executing GraphQL queries and mutations and for validating the responses. -->
+    <dependency>
+      <groupId>org.springframework.graphql</groupId>
+      <artifactId>spring-graphql-test</artifactId>
+      <version>${spring-graphql-test.version}</version>
       <scope>test</scope>
     </dependency>
 
