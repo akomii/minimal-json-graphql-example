@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.example</groupId>
+    <artifactId>graphql</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.example.graphql</groupId>
+  <artifactId>endpoint</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <dependencies>
+    <!-- GraphQL Spring Boot Starter: Starter for using GraphQL in Spring Boot applications.
+         It provides tools to create a GraphQL API and to consume a GraphQL API. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-graphql</artifactId>
+    </dependency>
+
+    <!-- GraphQL Testing: Library for testing GraphQL APIs in Spring applications.
+         It provides utilities for executing GraphQL queries and mutations and for validating the responses. -->
+    <dependency>
+      <groupId>org.springframework.graphql</groupId>
+      <artifactId>spring-graphql-test</artifactId>
+      <version>${spring-graphql-test.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

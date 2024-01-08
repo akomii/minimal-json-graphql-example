@@ -22,27 +22,39 @@
  * SOFTWARE.
  */
 
-package org.example.grahql.server.persistence;
+package org.example.graphql.server.models;
 
-import org.example.grahql.server.models.Author;
-import org.springframework.data.keyvalue.repository.KeyValueRepository;
-import org.springframework.stereotype.Repository;
+import java.io.Serializable;
 
 /**
- * Repository interface for {@link Author} instances.
+ * Interface for {@link Book} instances.
  * <p>
- * This interface extends {@link org.springframework.data.keyvalue.repository.KeyValueRepository},
- * which provides methods for CRUD operations on {@link Author} instances stored in a key-value
- * store.
+ * This interface provides getter and setter methods for the properties of a {@link Book}. It
+ * extends {@link java.io.Serializable}, which means it can be converted into a byte stream and
+ * recovered later.
  * <p>
- * The {@link org.springframework.stereotype.Repository} annotation indicates that this interface is
- * a repository. Spring will detect this interface and create a proxy implementation at runtime.
+ * Each method should be implemented to interact with the corresponding property of the
+ * {@link Book}.
  *
  * @author Alexander Kombeiz
  * @version 1.0
- * @since 04-01-2024
+ * @since 08-01-2024
  */
-@Repository
-public interface AuthorRepository extends KeyValueRepository<Author, Long> {
+public interface Book extends Serializable {
 
+  Long getId();
+
+  void setId(Long id);
+
+  String getTitle();
+
+  void setTitle(String title);
+
+  int getPublishedYear();
+
+  void setPublishedYear(int publishedYear);
+
+  Author getAuthor();
+
+  void setAuthor(Author author);
 }

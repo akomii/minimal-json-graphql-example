@@ -22,31 +22,30 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.server;
+package org.example.graphql.server.persistence;
 
-import java.time.Duration;
-import org.testcontainers.containers.FixedHostPortGenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
+import java.util.Optional;
+import org.example.graphql.server.models.Author;
 
 /**
- * RedisContainer is a custom Testcontainers configuration for a Redis container. It extends
- * FixedHostPortGenericContainer to bind a fixed port for the Redis server. This class is used to
- * create a Redis container for integration tests.
+ * Repository interface for {@link Author} instances.
+ * <p>
+ * This interface provides methods for CRUD operations on {@link Author} instances. It is not
+ * extending any Spring Data interfaces, so the implementation needs to be provided manually.
+ * <p>
+ * Each method should be implemented to interact with the database or any other persistent storage.
  *
- * @see org.testcontainers.containers.FixedHostPortGenericContainer
+ * @author Alexander Kombeiz
+ * @version 1.1
+ * @since 04-01-2024
  */
-public class RedisContainer extends FixedHostPortGenericContainer<RedisContainer> {
+public interface AuthorRepository {
 
-  private static final int REDIS_PORT = 6379;
-  private static final String REDIS_IMAGE = "redis:7.2.3";
+  Optional<Author> findById(Long id);
 
-  /**
-   * Constructs a new RedisContainer with the default Redis image and port. It waits for the Redis
-   * server to start listening on the specified port, with a timeout of 1 minute.
-   */
-  public RedisContainer() {
-    super(REDIS_IMAGE);
-    withFixedExposedPort(REDIS_PORT, REDIS_PORT);
-    waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofMinutes(1)));
-  }
+  Iterable<Author> findAll();
+
+  Author save(Author author);
+
+  void deleteById(Long id);
 }

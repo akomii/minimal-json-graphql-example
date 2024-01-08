@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package org.example.grahql.server.resolvers;
+package org.example.graphql.server.resolvers;
 
 import java.util.Optional;
-import org.example.grahql.server.models.Author;
-import org.example.grahql.server.models.Book;
-import org.example.grahql.server.persistence.AuthorRepository;
-import org.example.grahql.server.persistence.BookRepository;
+import org.example.graphql.server.factories.BookFactory;
+import org.example.graphql.server.models.Author;
+import org.example.graphql.server.models.Book;
+import org.example.graphql.server.persistence.AuthorRepository;
+import org.example.graphql.server.persistence.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,19 +39,17 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 /**
- * Controller class for handling GraphQL queries and mutations related to {@link Book} instances.
- * <p>
- * This class uses the {@link org.springframework.stereotype.Controller} annotation to indicate that
- * it's a controller. It also uses the
+ * This class is a controller for handling GraphQL queries and mutations related to {@link Book}
+ * instances. It uses the {@link org.springframework.stereotype.Controller} annotation to indicate
+ * that it's a controller. The
  * {@link org.springframework.graphql.data.method.annotation.QueryMapping} and
- * {@link org.springframework.graphql.data.method.annotation.MutationMapping} annotations to map
- * GraphQL queries and mutations to methods.
- * <p>
- * The {@link org.springframework.beans.factory.annotation.Autowired} annotation is used to inject
+ * {@link org.springframework.graphql.data.method.annotation.MutationMapping} annotations are used
+ * to map GraphQL queries and mutations to methods. The
+ * {@link org.springframework.beans.factory.annotation.Autowired} annotation is used to inject
  * dependencies.
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.1
  * @since 04-01-2024
  */
 @Controller
@@ -62,16 +61,21 @@ public class BookResolver {
 
   private final AuthorRepository authorRepository;
 
+  private final BookFactory bookFactory;
+
   /**
    * Constructs a new BookResolver with the given repositories.
    *
    * @param bookRepository   the repository for accessing books.
    * @param authorRepository the repository for accessing authors.
+   * @param bookFactory      the factory for creating new books.
    */
   @Autowired
-  public BookResolver(BookRepository bookRepository, AuthorRepository authorRepository) {
+  public BookResolver(BookRepository bookRepository, AuthorRepository authorRepository,
+      BookFactory bookFactory) {
     this.bookRepository = bookRepository;
     this.authorRepository = authorRepository;
+    this.bookFactory = bookFactory;
   }
 
   /**
@@ -112,7 +116,7 @@ public class BookResolver {
         title, publishedYear, authorId);
     Author author = authorRepository.findById(authorId).orElse(null);
     if (author != null) {
-      Book newBook = new Book();
+      Book newBook = bookFactory.create();
       newBook.setTitle(title);
       newBook.setPublishedYear(publishedYear);
       newBook.setAuthor(author);
@@ -144,7 +148,7 @@ public class BookResolver {
         author.getPublishedBookIds().remove(id);
         authorRepository.save(author);
       }
-      bookRepository.delete(book);
+      bookRepository.deleteById(id);
       return true;
     } else {
       log.warn("Book with id {} not found.", id);

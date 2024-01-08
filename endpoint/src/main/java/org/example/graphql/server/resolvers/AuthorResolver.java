@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package org.example.grahql.server.resolvers;
+package org.example.graphql.server.resolvers;
 
 import java.util.List;
 import java.util.Optional;
-import org.example.grahql.server.models.Author;
-import org.example.grahql.server.persistence.AuthorRepository;
-import org.example.grahql.server.persistence.BookRepository;
+import org.example.graphql.server.factories.AuthorFactory;
+import org.example.graphql.server.models.Author;
+import org.example.graphql.server.persistence.AuthorRepository;
+import org.example.graphql.server.persistence.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,19 +39,17 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 /**
- * Controller class for handling GraphQL queries and mutations related to {@link Author} instances.
- * <p>
- * This class uses the {@link org.springframework.stereotype.Controller} annotation to indicate that
- * it's a controller. It also uses the
+ * This class is a controller for handling GraphQL queries and mutations related to {@link Author}
+ * instances. It uses the {@link org.springframework.stereotype.Controller} annotation to indicate
+ * that it's a controller. The
  * {@link org.springframework.graphql.data.method.annotation.QueryMapping} and
- * {@link org.springframework.graphql.data.method.annotation.MutationMapping} annotations to map
- * GraphQL queries and mutations to methods.
- * <p>
- * The {@link org.springframework.beans.factory.annotation.Autowired} annotation is used to inject
+ * {@link org.springframework.graphql.data.method.annotation.MutationMapping} annotations are used
+ * to map GraphQL queries and mutations to methods. The
+ * {@link org.springframework.beans.factory.annotation.Autowired} annotation is used to inject
  * dependencies.
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.1
  * @since 04-01-2024
  */
 @Controller
@@ -62,16 +61,21 @@ public class AuthorResolver {
 
   private final BookRepository bookRepository;
 
+  private final AuthorFactory authorFactory;
+
   /**
    * Constructs a new AuthorResolver with the given repositories.
    *
    * @param authorRepository the repository for accessing authors.
    * @param bookRepository   the repository for accessing books.
+   * @param authorFactory    the factory for creating new authors.
    */
   @Autowired
-  public AuthorResolver(AuthorRepository authorRepository, BookRepository bookRepository) {
+  public AuthorResolver(AuthorRepository authorRepository, BookRepository bookRepository,
+      AuthorFactory authorFactory) {
     this.authorRepository = authorRepository;
     this.bookRepository = bookRepository;
+    this.authorFactory = authorFactory;
   }
 
   /**
@@ -112,7 +116,7 @@ public class AuthorResolver {
       @Argument List<Long> bookIds) {
     log.info("Creating author with firstName: {} and lastName: {} and bookIds: {}",
         firstName, lastName, bookIds);
-    Author newAuthor = new Author();
+    Author newAuthor = authorFactory.create();
     newAuthor.setFirstName(firstName);
     newAuthor.setLastName(lastName);
     newAuthor.setPublishedBookIds(bookIds);
@@ -135,7 +139,7 @@ public class AuthorResolver {
         log.info("Deleting book with id: {} associated with author id: {}", bookId, id);
         bookRepository.deleteById(bookId);
       });
-      authorRepository.delete(author);
+      authorRepository.deleteById(id);
       return true;
     } else {
       log.warn("Author with id {} not found.", id);
