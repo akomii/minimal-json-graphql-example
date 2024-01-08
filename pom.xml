@@ -20,9 +20,10 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
   <dependencies>
-    <!-- Lombok: A library for reducing boilerplate code in Java -->
+    <!-- Lombok: A Java library that automatically plugs into your editor and build tools,
+         spicing up your Java with automatic generation of getters, setters, equals, hashCode and toString methods,
+         and more. -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -30,39 +31,58 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Spring Boot Starter for Web Applications -->
+    <!-- Spring Boot Starter for Web: Starter for building web, including RESTful, applications using Spring MVC.
+         Uses Tomcat as the default embedded container. -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    <!-- GraphQL Spring Boot Starter -->
+
+    <!-- GraphQL Spring Boot Starter: Starter for using GraphQL in Spring Boot applications.
+         It provides tools to create a GraphQL API and to consume a GraphQL API. -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-graphql</artifactId>
     </dependency>
-    <!-- Spring Data Redis -->
+
+    <!-- Spring Data Redis: Module of Spring Data that provides abstractions for the integration
+         between Spring and Redis, including connection, serialization/deserialization, and repository support. -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
 
-    <!-- Spring Boot Starter for Testing -->
+    <!-- Spring Boot Starter for Testing: Starter for testing Spring Boot applications with libraries
+         including JUnit, Hamcrest and Mockito. -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- GraphQL Testing -->
+
+    <!-- GraphQL Testing: Library for testing GraphQL APIs in Spring applications.
+         It provides utilities for executing GraphQL queries and mutations and for validating the responses. -->
     <dependency>
       <groupId>org.springframework.graphql</groupId>
       <artifactId>spring-graphql-test</artifactId>
       <version>1.2.4</version>
       <scope>test</scope>
     </dependency>
-    <!-- TestContainers: A library for running tests in containers -->
+
+    <!-- TestContainers: A Java library that supports JUnit tests, providing lightweight,
+         throwaway instances of common databases, Selenium web browsers, or anything else that can run in a Docker container. -->
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
+      <version>1.18.3</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- TestContainers JUnit Jupiter: A module of TestContainers that provides integration with JUnit Jupiter,
+         the new programming and extension model provided in JUnit 5. -->
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
       <version>1.18.3</version>
       <scope>test</scope>
     </dependency>
@@ -71,16 +91,18 @@
   <build>
     <plugins>
       <plugin>
-        <!-- Deploy application local in pre-configured server -->
+        <!-- The Spring Boot Maven Plugin provides Spring Boot support in Maven, allowing packaging executable jar or war archives -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>org.example.graphql.server.MyApp</mainClass>
+          <mainClass>org.example.graphql.server.MyApp
+          </mainClass> <!-- The main class to start the application -->
         </configuration>
         <executions>
           <execution>
             <goals>
-              <goal>repackage</goal>
+              <goal>repackage
+              </goal> <!-- Repackages existing JAR and WAR archives so that they can be executed from the command line -->
             </goals>
           </execution>
         </executions>
