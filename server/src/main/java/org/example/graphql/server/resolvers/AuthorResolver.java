@@ -25,11 +25,9 @@
 package org.example.graphql.server.resolvers;
 
 import java.util.List;
-import java.util.Optional;
-import org.example.graphql.server.factories.AuthorFactory;
+import org.example.graphql.server.factories.BasicFactory;
 import org.example.graphql.server.models.Author;
-import org.example.graphql.server.persistence.AuthorRepository;
-import org.example.graphql.server.persistence.BookRepository;
+import org.example.graphql.server.services.BasicPersistenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +37,15 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 /**
- * This class is a controller for handling GraphQL queries and mutations related to {@link Author}
- * instances. It uses the {@link org.springframework.stereotype.Controller} annotation to indicate
- * that it's a controller. The
- * {@link org.springframework.graphql.data.method.annotation.QueryMapping} and
- * {@link org.springframework.graphql.data.method.annotation.MutationMapping} annotations are used
- * to map GraphQL queries and mutations to methods. The
- * {@link org.springframework.beans.factory.annotation.Autowired} annotation is used to inject
- * dependencies.
+ * Controller class for handling GraphQL queries and mutations related to {@link Author} instances.
+ * <p>
+ * This class provides methods to fetch an author by their ID, fetch all authors, create a new
+ * author, and delete an author by their ID. It uses a {@link BasicPersistenceService} to interact
+ * with the persistence layer and a {@link BasicFactory} to create new {@link Author} instances.
+ * <p>
+ * Each method is annotated with either {@link QueryMapping} or {@link MutationMapping} to indicate
+ * whether it's a GraphQL query or mutation. The {@link Argument} annotation is used to specify the
+ * arguments of the GraphQL query or mutation.
  *
  * @author Alexander Kombeiz
  * @version 1.1
@@ -57,25 +56,24 @@ public class AuthorResolver {
 
   private static final Logger log = LoggerFactory.getLogger(AuthorResolver.class);
 
-  private final AuthorRepository authorRepository;
+  private final BasicPersistenceService basicPersistenceService;
 
-  private final BookRepository bookRepository;
-
-  private final AuthorFactory authorFactory;
+  private final BasicFactory basicFactory;
 
   /**
-   * Constructs a new AuthorResolver with the given repositories.
+   * Constructs a new {@link AuthorResolver} with the given {@link BasicPersistenceService} and
+   * {@link BasicFactory}.
    *
-   * @param authorRepository the repository for accessing authors.
-   * @param bookRepository   the repository for accessing books.
-   * @param authorFactory    the factory for creating new authors.
+   * @param basicPersistenceService the {@link BasicPersistenceService} to use for interacting with
+   *                                the persistence layer.
+   * @param basicFactory            the {@link BasicFactory} to use for creating new {@link Author}
+   *                                instances.
    */
   @Autowired
-  public AuthorResolver(AuthorRepository authorRepository, BookRepository bookRepository,
-      AuthorFactory authorFactory) {
-    this.authorRepository = authorRepository;
-    this.bookRepository = bookRepository;
-    this.authorFactory = authorFactory;
+  public AuthorResolver(BasicPersistenceService basicPersistenceService,
+      BasicFactory basicFactory) {
+    this.basicPersistenceService = basicPersistenceService;
+    this.basicFactory = basicFactory;
   }
 
   /**
@@ -87,7 +85,7 @@ public class AuthorResolver {
   @QueryMapping
   public Author authorById(@Argument Long id) {
     log.info("Fetching author with id: {}", id);
-    return authorRepository.findById(id).orElse(null);
+    return basicPersistenceService.getAuthorById(id);
   }
 
   /**
@@ -96,9 +94,9 @@ public class AuthorResolver {
    * @return an iterable of all authors.
    */
   @QueryMapping
-  public Iterable<Author> authors() {
+  public List<Author> authors() {
     log.info("Fetching all authors");
-    return authorRepository.findAll();
+    return basicPersistenceService.getAllAuthors();
   }
 
   /**
@@ -116,11 +114,11 @@ public class AuthorResolver {
       @Argument List<Long> bookIds) {
     log.info("Creating author with firstName: {} and lastName: {} and bookIds: {}",
         firstName, lastName, bookIds);
-    Author newAuthor = authorFactory.create();
+    Author newAuthor = basicFactory.createAuthor();
     newAuthor.setFirstName(firstName);
     newAuthor.setLastName(lastName);
     newAuthor.setPublishedBookIds(bookIds);
-    return authorRepository.save(newAuthor);
+    return basicPersistenceService.persistAuthor(newAuthor);
   }
 
   /**
@@ -132,14 +130,13 @@ public class AuthorResolver {
   @MutationMapping
   public Boolean deleteAuthor(@Argument Long id) {
     log.info("Deleting author with id: {}", id);
-    Optional<Author> authorOptional = authorRepository.findById(id);
-    if (authorOptional.isPresent()) {
-      Author author = authorOptional.get();
+    Author author = basicPersistenceService.getAuthorById(id);
+    if (author != null) {
       author.getPublishedBookIds().forEach(bookId -> {
         log.info("Deleting book with id: {} associated with author id: {}", bookId, id);
-        bookRepository.deleteById(bookId);
+        basicPersistenceService.deleteBookById(bookId);
       });
-      authorRepository.deleteById(id);
+      basicPersistenceService.deleteAuthorById(id);
       return true;
     } else {
       log.warn("Author with id {} not found.", id);

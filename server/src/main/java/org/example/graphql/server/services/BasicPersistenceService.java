@@ -22,21 +22,38 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.server.factories;
+package org.example.graphql.server.services;
 
+import java.util.List;
 import org.example.graphql.server.models.Author;
+import org.example.graphql.server.models.Book;
 
 /**
- * Interface for a factory to create {@link Author} instances.
+ * Interface for a service to interact with the persistence layer for {@link Author} and
+ * {@link Book} instances.
  * <p>
- * This interface provides a method to create new instances of an {@link Author}. The implementation
- * of this interface should handle the instantiation and initialization of the {@link Author}.
+ * This interface provides methods to fetch, persist, and delete {@link Author} and {@link Book}
+ * instances by their ID. It also provides methods to fetch all authors and books.
  *
  * @author Alexander Kombeiz
  * @version 1.0
  * @since 08-01-2024
  */
-public interface AuthorFactory {
+public interface BasicPersistenceService {
 
-  Author create();
+  Author getAuthorById(Long id);
+
+  List<Author> getAllAuthors();
+
+  Author persistAuthor(Author author);
+
+  void deleteAuthorById(Long id);
+
+  Book getBookById(Long id);
+
+  List<Book> getAllBooks();
+
+  Book persistBook(Book book);
+
+  void deleteBookById(Long id);
 }

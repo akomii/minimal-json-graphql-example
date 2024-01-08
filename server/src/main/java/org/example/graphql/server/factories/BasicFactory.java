@@ -22,30 +22,25 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.server.persistence;
+package org.example.graphql.server.factories;
 
-import java.util.Optional;
 import org.example.graphql.server.models.Author;
+import org.example.graphql.server.models.Book;
 
 /**
- * Repository interface for {@link Author} instances.
+ * Interface for a factory to create {@link Author} and {@link Book} instances.
  * <p>
- * This interface provides methods for CRUD operations on {@link Author} instances. It is not
- * extending any Spring Data interfaces, so the implementation needs to be provided manually.
- * <p>
- * Each method should be implemented to interact with the database or any other persistent storage.
+ * This interface provides methods to create new instances of an {@link Author} and a {@link Book}.
+ * The implementation of this interface should handle the instantiation and initialization of the
+ * {@link Author} and {@link Book}.
  *
  * @author Alexander Kombeiz
- * @version 1.1
- * @since 04-01-2024
+ * @version 1.0
+ * @since 08-01-2024
  */
-public interface AuthorRepository {
+public interface BasicFactory {
 
-  Optional<Author> findById(Long id);
+  Author createAuthor();
 
-  Iterable<Author> findAll();
-
-  Author save(Author author);
-
-  void deleteById(Long id);
+  Book createBook();
 }
