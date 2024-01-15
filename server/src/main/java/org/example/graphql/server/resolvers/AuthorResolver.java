@@ -108,16 +108,11 @@ public class AuthorResolver {
    * @return the created author.
    */
   @MutationMapping
-  public Author createAuthor(
-      @Argument String firstName,
-      @Argument String lastName,
-      @Argument List<Long> bookIds) {
-    log.info("Creating author with firstName: {} and lastName: {} and bookIds: {}",
-        firstName, lastName, bookIds);
+  public Author createAuthor(@Argument String firstName, @Argument String lastName) {
+    log.info("Creating author with firstName: {} and lastName: {}", firstName, lastName);
     Author newAuthor = basicFactory.createAuthor();
     newAuthor.setFirstName(firstName);
     newAuthor.setLastName(lastName);
-    newAuthor.setPublishedBookIds(bookIds);
     return basicPersistenceService.persistAuthor(newAuthor);
   }
 

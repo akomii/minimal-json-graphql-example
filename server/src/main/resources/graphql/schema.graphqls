@@ -20,7 +20,7 @@ type Query {
 }
 
 type Mutation {
-    createAuthor(firstName: String!, lastName: String!, booksId: [ID]): Author
+    createAuthor(firstName: String!, lastName: String!): Author
     deleteAuthor(id: ID!): Boolean
     createBook(title: String!, publishedYear: Int!, authorId: ID!): Book
     deleteBook(id: ID!): Boolean
