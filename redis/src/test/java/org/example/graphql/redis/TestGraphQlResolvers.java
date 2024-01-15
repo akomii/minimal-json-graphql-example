@@ -55,8 +55,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 class TestGraphQlResolvers {
 
-  // TODO FIX Reference Error between RedisAuthor and RedisBook
-
   @Autowired
   private GraphQlTester graphQlTester;
 
@@ -67,6 +65,7 @@ class TestGraphQlResolvers {
   private static Long AUTHOR_ID_2;
   private static Long BOOK_ID_1;
   private static Long BOOK_ID_2;
+  private static Long BOOK_ID_3;
 
   @Test
   @Order(1)
@@ -75,9 +74,27 @@ class TestGraphQlResolvers {
     AUTHOR_ID_2 = createAuthor("John", "Doe");
     BOOK_ID_1 = createBook("Effective Java", 2000, AUTHOR_ID_1);
     BOOK_ID_2 = createBook("My Diary, Part 1", 2023, AUTHOR_ID_2);
-    createBook("My Diary, Part 2", 2023, AUTHOR_ID_2);
+    BOOK_ID_3 = createBook("My Diary, Part 2", 2023, AUTHOR_ID_2);
     checkAuthors();
     checkBooks();
+  }
+
+  private Long createAuthor(String firstName, String lastName) {
+    String mutation = String.format(
+        "mutation { createAuthor(firstName: \"%s\", lastName: \"%s\") { id } }", firstName,
+        lastName);
+    return graphQlTester.document(mutation).execute().path("data.createAuthor.id")
+        .entity(new ParameterizedTypeReference<Long>() {
+        }).get();
+  }
+
+  private Long createBook(String title, int publishedYear, Long authorId) {
+    String mutation = String.format(
+        "mutation { createBook(title: \"%s\", publishedYear: %d, authorId: \"%s\") { id } }", title,
+        publishedYear, authorId);
+    return graphQlTester.document(mutation).execute().path("data.createBook.id")
+        .entity(new ParameterizedTypeReference<Long>() {
+        }).get();
   }
 
   private void checkAuthors() {
@@ -89,6 +106,13 @@ class TestGraphQlResolvers {
     assertTrue(authors.stream().anyMatch(
         author -> "John".equals(author.getFirstName()) && "Doe".equals(author.getLastName())
             && author.getPublishedBookIds().size() == 2));
+  }
+
+  private List<RedisAuthor> getAuthors() {
+    String query = "query { authors { firstName lastName publishedBookIds } }";
+    return graphQlTester.document(query).execute().path("data.authors")
+        .entity(new ParameterizedTypeReference<List<RedisAuthor>>() {
+        }).get();
   }
 
   private void checkBooks() {
@@ -103,6 +127,13 @@ class TestGraphQlResolvers {
     assertTrue(books.stream().anyMatch(
         book -> "My Diary, Part 2".equals(book.getTitle())
             && AUTHOR_ID_2.equals(book.getAuthor().getId())));
+  }
+
+  private List<RedisBook> getBooks() {
+    String query = "query { books { title author { id } } }";
+    return graphQlTester.document(query).execute().path("data.books")
+        .entity(new ParameterizedTypeReference<List<RedisBook>>() {
+        }).get();
   }
 
   @Test
@@ -137,11 +168,19 @@ class TestGraphQlResolvers {
 
   @Test
   @Order(5)
-  void getAuthorById() {
+  void checkSingleAuthor() {
     RedisAuthor author = getAuthorById(AUTHOR_ID_2);
     assertThat(author.getFirstName()).isEqualTo("John");
     assertThat(author.getLastName()).isEqualTo("Doe");
     assertThat(author.getPublishedBookIds().size()).isEqualTo(2);
+  }
+
+  private RedisAuthor getAuthorById(Long id) {
+    String query = String.format(
+        "query { authorById(id: \"%s\") { firstName lastName publishedBookIds } }", id);
+    return graphQlTester.document(query).execute().path("data.authorById")
+        .entity(new ParameterizedTypeReference<RedisAuthor>() {
+        }).get();
   }
 
   @Test
@@ -154,13 +193,21 @@ class TestGraphQlResolvers {
 
   @Test
   @Order(7)
-  void getBookById() {
+  void checkSingleBook() {
     RedisBook book = getBookById(BOOK_ID_1);
     assertThat(book.getTitle()).isEqualTo("Effective Java");
     assertThat(book.getPublishedYear()).isEqualTo(2000);
     Author author = book.getAuthor();
     assertThat(author.getFirstName()).isEqualTo("Joshua");
     assertThat(author.getLastName()).isEqualTo("Bloch");
+  }
+
+  private RedisBook getBookById(Long id) {
+    String query = String.format(
+        "query { bookById(id: \"%s\") { title publishedYear author { firstName lastName } } }", id);
+    return graphQlTester.document(query).execute().path("data.bookById")
+        .entity(new ParameterizedTypeReference<RedisBook>() {
+        }).get();
   }
 
   @Test
@@ -196,7 +243,7 @@ class TestGraphQlResolvers {
   @Test
   @Order(10)
   void deleteBook() {
-    String mutation = String.format("mutation { deleteBook(id: \"%s\") }", BOOK_ID_2);
+    String mutation = String.format("mutation { deleteBook(id: \"%s\") }", BOOK_ID_3);
     Boolean isDeleted = graphQlTester.document(mutation).execute().path("data.deleteBook")
         .entity(new ParameterizedTypeReference<Boolean>() {
         }).get();
@@ -214,53 +261,5 @@ class TestGraphQlResolvers {
         .entity(new ParameterizedTypeReference<Boolean>() {
         }).get();
     assertThat(isDeleted).isFalse();
-  }
-
-  private Long createAuthor(String firstName, String lastName) {
-    String mutation = String.format(
-        "mutation { createAuthor(firstName: \"%s\", lastName: \"%s\") { id } }", firstName,
-        lastName);
-    return graphQlTester.document(mutation).execute().path("data.createAuthor.id")
-        .entity(new ParameterizedTypeReference<Long>() {
-        }).get();
-  }
-
-  private RedisAuthor getAuthorById(Long id) {
-    String query = String.format(
-        "query { authorById(id: \"%s\") { firstName lastName publishedBookIds } }", id);
-    return graphQlTester.document(query).execute().path("data.authorById")
-        .entity(new ParameterizedTypeReference<RedisAuthor>() {
-        }).get();
-  }
-
-  private List<RedisAuthor> getAuthors() {
-    String query = "query { authors { firstName lastName } }";
-    return graphQlTester.document(query).execute().path("data.authors")
-        .entity(new ParameterizedTypeReference<List<RedisAuthor>>() {
-        }).get();
-  }
-
-  private Long createBook(String title, int publishedYear, Long authorId) {
-    String mutation = String.format(
-        "mutation { createBook(title: \"%s\", publishedYear: %d, authorId: \"%s\") { id } }", title,
-        publishedYear, authorId);
-    return graphQlTester.document(mutation).execute().path("data.createBook.id")
-        .entity(new ParameterizedTypeReference<Long>() {
-        }).get();
-  }
-
-  private List<RedisBook> getBooks() {
-    String query = "query { books { title } }";
-    return graphQlTester.document(query).execute().path("data.books")
-        .entity(new ParameterizedTypeReference<List<RedisBook>>() {
-        }).get();
-  }
-
-  private RedisBook getBookById(Long id) {
-    String query = String.format(
-        "query { bookById(id: \"%s\") { title publishedYear author { firstName lastName } } }", id);
-    return graphQlTester.document(query).execute().path("data.bookById")
-        .entity(new ParameterizedTypeReference<RedisBook>() {
-        }).get();
   }
 }

@@ -24,6 +24,7 @@
 
 package org.example.graphql.redis.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.Serial;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,7 +49,7 @@ import org.springframework.data.redis.core.index.Indexed;
  * indexed and that it is a reference to another domain object.
  *
  * @author Alexander Kombeiz
- * @version 1.01
+ * @version 1.02
  * @since 04-01-2024
  */
 @RedisHash("book")
@@ -74,5 +75,6 @@ public class RedisBook implements Book {
 
   int publishedYear;
 
+  @JsonDeserialize(as = RedisAuthor.class)
   Author author;
 }
