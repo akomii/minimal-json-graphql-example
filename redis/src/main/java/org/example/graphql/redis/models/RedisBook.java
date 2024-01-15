@@ -48,7 +48,7 @@ import org.springframework.data.redis.core.index.Indexed;
  * indexed and that it is a reference to another domain object.
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.01
  * @since 04-01-2024
  */
 @RedisHash("book")
@@ -74,17 +74,5 @@ public class RedisBook implements Book {
 
   int publishedYear;
 
-  /**
-   * The author of the book.
-   * <p>
-   * The {@link org.springframework.data.redis.core.index.Indexed} annotation indicates that this
-   * field should be indexed, which allows for efficient searching and querying in Redis.
-   * <p>
-   * The {@link org.springframework.data.annotation.Reference} annotation indicates that this field
-   * is a reference to another domain object. This is used in the context of Redis to store a
-   * reference to the Author object associated with this book.
-   */
-  @Indexed
-  @Reference
   Author author;
 }
