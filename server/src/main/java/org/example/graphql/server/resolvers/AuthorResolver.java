@@ -48,7 +48,7 @@ import org.springframework.stereotype.Controller;
  * arguments of the GraphQL query or mutation.
  *
  * @author Alexander Kombeiz
- * @version 1.1
+ * @version 1.02
  * @since 04-01-2024
  */
 @Controller
@@ -104,7 +104,6 @@ public class AuthorResolver {
    *
    * @param firstName the first name of the author to create.
    * @param lastName  the last name of the author to create.
-   * @param bookIds   the IDs of the books published by the author to create.
    * @return the created author.
    */
   @MutationMapping
@@ -117,7 +116,11 @@ public class AuthorResolver {
   }
 
   /**
-   * Deletes an author by their ID.
+   * Deletes an author with the specified ID and associated books.
+   * <p>
+   * This method removes the specified author and all books associated with them. The deletion
+   * process includes removing each associated book from the persistence layer, ensuring the
+   * maintenance of a consistent dependency relationship between authors and books.
    *
    * @param id the ID of the author to delete.
    * @return true if the author was deleted, false otherwise.

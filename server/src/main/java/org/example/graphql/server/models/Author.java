@@ -38,7 +38,7 @@ import java.util.List;
  * {@link Author}.
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.02
  * @since 08-01-2024
  */
 public interface Author extends Serializable {
@@ -58,4 +58,8 @@ public interface Author extends Serializable {
   List<Long> getPublishedBookIds();
 
   void setPublishedBookIds(List<Long> publishedBookIds);
+
+  void addPublishedBook(Long id);
+
+  void removePublishedBook(Long id);
 }

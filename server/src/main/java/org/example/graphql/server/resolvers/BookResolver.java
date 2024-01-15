@@ -49,7 +49,7 @@ import org.springframework.stereotype.Controller;
  * arguments of the GraphQL query or mutation.
  *
  * @author Alexander Kombeiz
- * @version 1.1
+ * @version 1.02
  * @since 04-01-2024
  */
 @Controller
@@ -100,7 +100,11 @@ public class BookResolver {
   }
 
   /**
-   * Creates a new book.
+   * Creates a new book with the specified title, published year, and author ID.
+   * <p>
+   * This method establishes a dependency relationship between the {@link Author} and {@link Book}
+   * entities. The author, identified by the provided {@code authorId}, is associated with the newly
+   * created book.
    *
    * @param title         the title of the book to create.
    * @param publishedYear the year the book was published.
@@ -110,8 +114,8 @@ public class BookResolver {
   @MutationMapping
   public Book createBook(@Argument String title, @Argument int publishedYear,
       @Argument Long authorId) {
-    log.info("Creating book with title: {}, publishedYear: {}, and authorId: {}",
-        title, publishedYear, authorId);
+    log.info("Creating book with title: {}, publishedYear: {}, and authorId: {}", title,
+        publishedYear, authorId);
     Author author = basicPersistenceService.getAuthorById(authorId);
     if (author != null) {
       Book newBook = basicFactory.createBook();
@@ -119,7 +123,7 @@ public class BookResolver {
       newBook.setPublishedYear(publishedYear);
       newBook.setAuthor(author);
       Book savedBook = basicPersistenceService.persistBook(newBook);
-      author.getPublishedBookIds().add(savedBook.getId());
+      author.addPublishedBook(savedBook.getId());
       basicPersistenceService.persistAuthor(author);
       return savedBook;
     } else {
@@ -129,7 +133,10 @@ public class BookResolver {
   }
 
   /**
-   * Deletes a book by its ID.
+   * Deletes a book with the specified ID.
+   * <p>
+   * This method removes the specified book from the associated {@link Author}'s list of books,
+   * ensuring the maintenance of a consistent dependency relationship between authors and books.
    *
    * @param id the ID of the book to delete.
    * @return true if the book was deleted, false otherwise.
@@ -140,11 +147,9 @@ public class BookResolver {
     Book book = basicPersistenceService.getBookById(id);
     if (book != null) {
       Author author = book.getAuthor();
-      if (author != null) {
-        log.info("Removing book with id: {} from author with id: {}", id, author.getId());
-        author.getPublishedBookIds().remove(id);
-        basicPersistenceService.persistAuthor(author);
-      }
+      log.info("Removing book with id: {} from author with id: {}", id, author.getId());
+      author.removePublishedBook(id);
+      basicPersistenceService.persistAuthor(author);
       basicPersistenceService.deleteBookById(id);
       return true;
     } else {

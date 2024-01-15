@@ -46,7 +46,7 @@ import org.springframework.data.redis.core.RedisHash;
  * code.
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.01
  * @since 04-01-2024
  */
 @RedisHash("author")
@@ -73,4 +73,14 @@ public class RedisAuthor implements Author {
   String lastName;
 
   List<Long> publishedBookIds = new ArrayList<>();
+
+  @Override
+  public void addPublishedBook(Long id) {
+    publishedBookIds.add(id);
+  }
+
+  @Override
+  public void removePublishedBook(Long id) {
+    publishedBookIds.remove(id);
+  }
 }
