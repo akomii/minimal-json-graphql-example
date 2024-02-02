@@ -33,6 +33,16 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class generates unique IDs for entities. It uses an AtomicLong to ensure thread safety. The
+ * initial value of the ID counter is the highest persisted ID in the working directory plus one.
+ * This class depends on {@link org.example.graphql.filesystem.utils.DirectoryManager} to get the
+ * given working directory.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 2024-02-02
+ */
 @Component
 public class IdGenerator {
 
@@ -40,8 +50,8 @@ public class IdGenerator {
 
   private final AtomicLong idCounter;
 
-  public IdGenerator(DirectoryCreator dirCreator) {
-    Path workingDir = dirCreator.getWorkingDir();
+  public IdGenerator(DirectoryManager dirManager) {
+    Path workingDir = dirManager.getWorkingDir();
     this.idCounter = new AtomicLong(findHighestPersistedId(workingDir) + 1);
   }
 

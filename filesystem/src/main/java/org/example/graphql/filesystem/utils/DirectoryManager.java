@@ -22,46 +22,50 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.filesystem.models;
+package org.example.graphql.filesystem.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import lombok.AccessLevel;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
-import org.example.graphql.server.models.Author;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
- * This class represents an author in the file system. It extends the
- * {@link org.example.graphql.filesystem.models.AbstractPersistentObject} class and implements the
- * {@link org.example.graphql.server.models.Author} interface. It contains the first name, last
- * name, and a list of IDs of the books published by the author.
+ * This class manages directories in the file system. It is responsible for initializing the working
+ * directory and providing absolute paths for the working directory and entities.
  *
  * @author Alexander Kombeiz
  * @version 1.0
  * @since 2024-02-02
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class FileSystemAuthor extends AbstractPersistentObject implements Author {
+@Component
+public class DirectoryManager {
 
-  String firstName;
+  @Value("${filesystem.base-path:/tmp}")
+  private String basePath;
 
-  String lastName;
+  @Getter
+  private Path workingDir;
 
-  List<Long> publishedBookIds = new ArrayList<>();
-
-  @Override
-  public void addPublishedBook(Long id) {
-    publishedBookIds.add(id);
+  public DirectoryManager(String dirName) {
+    initWorkingDir(dirName);
   }
 
-  @Override
-  public void removePublishedBook(Long id) {
-    publishedBookIds.remove(id);
+  private void initWorkingDir(String dirName) {
+    Path dirPath = Paths.get(basePath, dirName);
+    File dir = dirPath.toFile();
+    if (!dir.exists() && !dir.mkdirs()) {
+      throw new RuntimeException("Failed to create directory: " + dirPath);
+    }
+    workingDir = dirPath;
+  }
+
+  public String getAbsolutePathForWorkingDir() {
+    return workingDir.toString();
+  }
+
+  public String getAbsoluteFilePathForEntity(Long entityId, String extension) {
+    return workingDir.resolve(entityId + extension).toString();
   }
 }

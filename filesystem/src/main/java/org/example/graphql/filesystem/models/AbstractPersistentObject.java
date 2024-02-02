@@ -22,42 +22,31 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.filesystem.utils;
+package org.example.graphql.filesystem.models;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.Serial;
+import java.io.Serializable;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import lombok.Setter;
 
-@Component
-public class DirectoryCreator {
+/**
+ * This class represents an abstract persistent object that can be serialized. It contains a unique
+ * identifier (id) for each instance. This class is intended to be extended by other classes that
+ * need to be persisted and serialized.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 2024-02-02
+ */
+@Getter
+@Setter
+public abstract class AbstractPersistentObject implements Serializable {
 
-  @Value("${filesystem.base-path:/tmp}")
-  private String basePath;
+  /**
+   * The unique identifier for the serialized class.
+   */
+  @Serial
+  private static final long serialVersionUID = 1L;
 
-  @Getter
-  private Path workingDir;
-
-  public DirectoryCreator(String dirName) {
-    initWorkingDir(dirName);
-  }
-
-  private void initWorkingDir(String dirName) {
-    Path dirPath = Paths.get(basePath, dirName);
-    File dir = dirPath.toFile();
-    if (!dir.exists() && !dir.mkdirs()) {
-      throw new RuntimeException("Failed to create directory: " + dirPath);
-    }
-    workingDir = dirPath;
-  }
-
-  public String getAbsolutePathForWorkingDir() {
-    return workingDir.toString();
-  }
-
-  public String getAbsoluteFilePathForEntity(Long entityId, String extension) {
-    return workingDir.resolve(entityId + extension).toString();
-  }
+  Long id;
 }

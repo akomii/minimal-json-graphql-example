@@ -24,7 +24,6 @@
 
 package org.example.graphql.filesystem.models;
 
-import java.io.Serial;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,19 +32,21 @@ import lombok.experimental.FieldDefaults;
 import org.example.graphql.server.models.Author;
 import org.example.graphql.server.models.Book;
 
+/**
+ * This class represents a book in the file system. It extends the
+ * {@link org.example.graphql.filesystem.models.AbstractPersistentObject} class and implements the
+ * {@link org.example.graphql.server.models.Book} interface. It contains the title, published year,
+ * and the {@link org.example.graphql.server.models.Author} of the book.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 2024-02-02
+ */
 @NoArgsConstructor
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FileSystemBook implements Book {
-
-  /**
-   * The unique identifier for the serialized class.
-   */
-  @Serial
-  private static final long serialVersionUID = 1L;
-
-  Long id;
+public class FileSystemBook extends AbstractPersistentObject implements Book {
 
   String title;
 
