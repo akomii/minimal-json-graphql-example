@@ -24,23 +24,20 @@
 
 package org.example.graphql.server.models;
 
-import java.io.Serializable;
-
 /**
  * Interface for {@link Book} instances.
  * <p>
- * This interface provides getter and setter methods for the properties of a {@link Book}. It
- * extends {@link java.io.Serializable}, which means it can be converted into a byte stream and
- * recovered later.
+ * This interface defines the contract for a Book entity in the system. It includes methods to get
+ * and set the properties of a Book, such as its ID, title, published year, and author.
  * <p>
  * Each method should be implemented to interact with the corresponding property of the
  * {@link Book}.
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.01
  * @since 08-01-2024
  */
-public interface Book extends Serializable {
+public interface Book {
 
   Long getId();
 
@@ -58,3 +55,4 @@ public interface Book extends Serializable {
 
   void setAuthor(Author author);
 }
+

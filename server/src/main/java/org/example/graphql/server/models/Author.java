@@ -24,24 +24,23 @@
 
 package org.example.graphql.server.models;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Interface for {@link Author} instances.
  * <p>
- * This interface provides getter and setter methods for the properties of an {@link Author}. It
- * extends {@link java.io.Serializable}, which means it can be converted into a byte stream and
- * recovered later.
+ * This interface defines the contract for an Author entity in the system. It includes methods to
+ * get and set the properties of an Author, such as its ID, first name, last name, and published
+ * book IDs.
  * <p>
  * Each method should be implemented to interact with the corresponding property of the
  * {@link Author}.
  *
  * @author Alexander Kombeiz
- * @version 1.02
+ * @version 1.03
  * @since 08-01-2024
  */
-public interface Author extends Serializable {
+public interface Author {
 
   Long getId();
 
