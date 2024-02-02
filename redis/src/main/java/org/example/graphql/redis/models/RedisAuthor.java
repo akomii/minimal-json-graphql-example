@@ -25,6 +25,7 @@
 package org.example.graphql.redis.models;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -46,7 +47,7 @@ import org.springframework.data.redis.core.RedisHash;
  * code.
  *
  * @author Alexander Kombeiz
- * @version 1.01
+ * @version 1.02
  * @since 04-01-2024
  */
 @RedisHash("author")
@@ -54,7 +55,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RedisAuthor implements Author {
+public class RedisAuthor implements Author, Serializable {
 
   /**
    * The unique identifier for the serialized class.
