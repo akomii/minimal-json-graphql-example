@@ -21,6 +21,7 @@
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
+    <!-- Provides functionality for converting between Java objects and JSON -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
