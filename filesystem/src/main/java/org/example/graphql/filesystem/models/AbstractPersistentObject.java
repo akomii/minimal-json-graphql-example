@@ -30,9 +30,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * This class represents an abstract persistent object that can be serialized. It contains a unique
- * identifier (id) for each instance. This class is intended to be extended by other classes that
- * need to be persisted and serialized.
+ * Abstract base class for entities to provide common properties and functionality. This class
+ * provides a framework for defining persistent objects with a unique identifier. It implements
+ * {@link Serializable} to allow objects of subclasses to be serialized, ensuring that class
+ * definition changes are compatible with serialized forms.
  *
  * @author Alexander Kombeiz
  * @version 1.0

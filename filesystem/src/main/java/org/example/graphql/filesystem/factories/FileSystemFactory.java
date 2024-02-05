@@ -33,10 +33,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * Factory class for creating {@link FileSystemAuthor} and {@link FileSystemBook} instances.
- * <p>
- * This class implements the {@link BasicFactory} interface and overrides its methods to create
- * {@link FileSystemAuthor} and {@link FileSystemBook} instances. It is annotated with
- * {@link Component} to indicate that it is a Spring component.
  *
  * @author Alexander Kombeiz
  * @version 1.0

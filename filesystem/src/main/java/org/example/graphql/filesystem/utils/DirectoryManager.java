@@ -32,8 +32,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * This class manages directories in the file system. It is responsible for initializing the working
- * directory and providing absolute paths for the working directory and entities.
+ * This component initializes and manages a working directory for storing files and provides utility
+ * methods for constructing paths to files within this directory. The base path for the directory is
+ * configurable via application properties, with a default value pointing to the system's temporary
+ * directory.
  *
  * @author Alexander Kombeiz
  * @version 1.0
@@ -52,6 +54,13 @@ public class DirectoryManager {
     initWorkingDir(dirName);
   }
 
+  /**
+   * Initializes the working directory based on the provided directory name. If the directory does
+   * not exist, it attempts to create it.
+   *
+   * @param dirName the name of the directory to initialize
+   * @throws RuntimeException if the directory cannot be created
+   */
   private void initWorkingDir(String dirName) {
     Path dirPath = Paths.get(basePath, dirName);
     File dir = dirPath.toFile();
@@ -65,6 +74,14 @@ public class DirectoryManager {
     return workingDir.toString();
   }
 
+  /**
+   * Constructs and returns the absolute path for a file entity within the working directory, based
+   * on the entity's ID and the specified file extension.
+   *
+   * @param entityId  the unique identifier of the entity
+   * @param extension the file extension (e.g., ".json")
+   * @return the absolute path string for the entity's file
+   */
   public String getAbsoluteFilePathForEntity(Long entityId, String extension) {
     return workingDir.resolve(entityId + extension).toString();
   }

@@ -34,10 +34,9 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 
 /**
- * This class generates unique IDs for entities. It uses an AtomicLong to ensure thread safety. The
- * initial value of the ID counter is the highest persisted ID in the working directory plus one.
- * This class depends on {@link org.example.graphql.filesystem.utils.DirectoryManager} to get the
- * given working directory.
+ * This component initializes the ID counter to one more than the highest ID found among persisted
+ * JSON files in a given directory, ensuring that each generated ID is unique across application
+ * restarts. The directory to search in is provided by a {@link DirectoryManager} instance.
  *
  * @author Alexander Kombeiz
  * @version 1.0
@@ -50,11 +49,25 @@ public class IdGenerator {
 
   private final AtomicLong idCounter;
 
+  /**
+   * Constructs an {@code IdGenerator} with a reference to a {@link DirectoryManager}. The working
+   * directory for ID persistence is obtained from the {@link DirectoryManager}, and the initial
+   * value for the ID counter is set to one more than the highest persisted ID.
+   *
+   * @param dirManager the directory manager used to access the working directory
+   */
   public IdGenerator(DirectoryManager dirManager) {
     Path workingDir = dirManager.getWorkingDir();
     this.idCounter = new AtomicLong(findHighestPersistedId(workingDir) + 1);
   }
 
+  /**
+   * This method scans the directory for JSON files, extracts the numeric part of their filenames,
+   * and determines the maximum value. If no files are found or an error occurs, it returns 0.
+   *
+   * @param basePath the path to the directory containing persisted IDs
+   * @return the highest ID found, or 0 if no IDs are found or an error occurs
+   */
   private long findHighestPersistedId(Path basePath) {
     try (Stream<Path> paths = Files.walk(basePath)) {
       return paths.filter(Files::isRegularFile)
@@ -71,6 +84,12 @@ public class IdGenerator {
     }
   }
 
+  /**
+   * This method increments the internal counter and returns the new value, ensuring that each call
+   * to this method returns a unique identifier.
+   *
+   * @return a unique ID
+   */
   public Long generateId() {
     return idCounter.getAndIncrement();
   }

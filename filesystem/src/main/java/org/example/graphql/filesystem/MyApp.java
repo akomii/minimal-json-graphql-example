@@ -38,10 +38,8 @@ import org.springframework.context.annotation.ComponentScan;
  * <li>{@link org.springframework.boot.autoconfigure.EnableAutoConfiguration}: Tells Spring Boot to start adding beans based on classpath
  * settings, other beans, and various property settings.</li>
  * <li>{@link org.springframework.context.annotation.ComponentScan}: Tells Spring to look for other components, configurations, and services in
- * the 'com/example' package, allowing it to find and register the controllers.</li>
+ * the 'com/example/graphql' package, allowing it to find and register the controllers.</li>
  * </ul>
- * It is also annotated with {@link ComponentScan} to specify the base packages to scan for Spring components.
- * The main method runs the application.
  *
  * @author Alexander Kombeiz
  * @version 1.0

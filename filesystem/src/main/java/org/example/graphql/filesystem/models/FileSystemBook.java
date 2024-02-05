@@ -33,10 +33,14 @@ import org.example.graphql.server.models.Author;
 import org.example.graphql.server.models.Book;
 
 /**
- * This class represents a book in the file system. It extends the
- * {@link org.example.graphql.filesystem.models.AbstractPersistentObject} class and implements the
- * {@link org.example.graphql.server.models.Book} interface. It contains the title, published year,
- * and the {@link org.example.graphql.server.models.Author} of the book.
+ * Represents a book within a file system-based storage mechanism. This class extends
+ * {@link AbstractPersistentObject} to inherit common persistence properties and implements the
+ * {@link Book} interface to provide book-specific attributes and behavior.
+ * <p>
+ * This class encapsulates data for books, including title, publication year, and a reference to the
+ * {@link Author} of the book. It is designed to be used in contexts where books are managed and
+ * stored in a file system.
+ * </p>
  *
  * @author Alexander Kombeiz
  * @version 1.0
