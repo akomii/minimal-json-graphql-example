@@ -31,7 +31,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-import org.springframework.stereotype.Component;
 
 /**
  * This component initializes the ID counter to one more than the highest ID found among persisted
@@ -42,7 +41,6 @@ import org.springframework.stereotype.Component;
  * @version 1.0
  * @since 2024-02-02
  */
-@Component
 public class IdGenerator {
 
   private static final Logger logger = Logger.getLogger(IdGenerator.class.getName());

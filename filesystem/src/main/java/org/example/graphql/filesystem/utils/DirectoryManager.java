@@ -27,61 +27,51 @@ package org.example.graphql.filesystem.utils;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
- * This component initializes and manages a working directory for storing files and provides utility
- * methods for constructing paths to files within this directory. The base path for the directory is
- * configurable via application properties, with a default value pointing to the system's temporary
- * directory.
+ * Manages a specified working directory for file storage and operations within the application.
+ * This class is responsible for ensuring the existence of the working directory and provides
+ * utility methods for constructing file paths within this directory.
+ * <p>
+ * The working directory path is provided at construction and is immediately converted to an
+ * absolute and normalized {@link Path}. If the specified directory does not exist, it is created
+ * during the initialization phase.
+ * </p>
  *
  * @author Alexander Kombeiz
  * @version 1.0
  * @since 2024-02-02
  */
-@Component
+@Getter
 public class DirectoryManager {
 
-  @Value("${filesystem.base-path:/tmp}")
-  private String basePath;
+  private final Path workingDir;
 
-  @Getter
-  private Path workingDir;
-
-  public DirectoryManager(String dirName) {
-    initWorkingDir(dirName);
+  public DirectoryManager(String workingDir) {
+    this.workingDir = Paths.get(workingDir).toAbsolutePath().normalize();
+    initWorkingDir();
   }
 
   /**
-   * Initializes the working directory based on the provided directory name. If the directory does
-   * not exist, it attempts to create it.
+   * Validates and ensures the existence of the working directory. If the directory does not exist,
+   * it attempts to create it. Throws a RuntimeException if unable to create the directory.
    *
-   * @param dirName the name of the directory to initialize
-   * @throws RuntimeException if the directory cannot be created
+   * @throws RuntimeException if the directory cannot be created or the path is null.
    */
-  private void initWorkingDir(String dirName) {
-    Path dirPath = Paths.get(basePath, dirName);
-    File dir = dirPath.toFile();
+  private void initWorkingDir() {
+    Objects.requireNonNull(workingDir, "Working directory path must not be null");
+    File dir = workingDir.toFile();
     if (!dir.exists() && !dir.mkdirs()) {
-      throw new RuntimeException("Failed to create directory: " + dirPath);
+      throw new RuntimeException("Failed to create directory: " + workingDir);
     }
-    workingDir = dirPath;
   }
 
   public String getAbsolutePathForWorkingDir() {
     return workingDir.toString();
   }
 
-  /**
-   * Constructs and returns the absolute path for a file entity within the working directory, based
-   * on the entity's ID and the specified file extension.
-   *
-   * @param entityId  the unique identifier of the entity
-   * @param extension the file extension (e.g., ".json")
-   * @return the absolute path string for the entity's file
-   */
   public String getAbsoluteFilePathForEntity(Long entityId, String extension) {
     return workingDir.resolve(entityId + extension).toString();
   }
