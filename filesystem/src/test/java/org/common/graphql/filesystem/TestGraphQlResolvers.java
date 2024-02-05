@@ -22,14 +22,15 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.redis;
+package org.common.graphql.filesystem;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import org.example.graphql.redis.models.RedisAuthor;
-import org.example.graphql.redis.models.RedisBook;
+import org.example.graphql.filesystem.MyApp;
+import org.example.graphql.filesystem.models.FileSystemAuthor;
+import org.example.graphql.filesystem.models.FileSystemBook;
 import org.example.graphql.server.models.Author;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -41,8 +42,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.graphql.test.tester.GraphQlTester.Path;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 /**
  * This class contains unit tests for GraphQL resolvers. It tests the creation, retrieval, and
@@ -50,23 +49,22 @@ import org.testcontainers.junit.jupiter.Testcontainers;
  * a Redis container. The tests are ordered using the @Order annotation.
  */
 // TODO merge Tests and put abstract test into server package
+// TODO add clean up of created dirs
+// TODO fix bugs
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = MyApp.class)
 @AutoConfigureGraphQlTester
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Testcontainers
 class TestGraphQlResolvers {
 
   @Autowired
   private GraphQlTester graphQlTester;
-
-  @Container
-  private static final RedisContainer CONTAINER = new RedisContainer();
 
   private static Long AUTHOR_ID_1;
   private static Long AUTHOR_ID_2;
   private static Long BOOK_ID_1;
   private static Long BOOK_ID_2;
   private static Long BOOK_ID_3;
+
 
   @Test
   @Order(1)
@@ -99,7 +97,7 @@ class TestGraphQlResolvers {
   }
 
   private void checkAuthors() {
-    List<RedisAuthor> authors = getAuthors();
+    List<FileSystemAuthor> authors = getAuthors();
     assertThat(authors.size()).isEqualTo(2);
     assertTrue(authors.stream().anyMatch(
         author -> "Joshua".equals(author.getFirstName()) && "Bloch".equals(author.getLastName())
@@ -109,15 +107,15 @@ class TestGraphQlResolvers {
             && author.getPublishedBookIds().size() == 2));
   }
 
-  private List<RedisAuthor> getAuthors() {
+  private List<FileSystemAuthor> getAuthors() {
     String query = "query { authors { firstName lastName publishedBookIds } }";
     return graphQlTester.document(query).execute().path("data.authors")
-        .entity(new ParameterizedTypeReference<List<RedisAuthor>>() {
+        .entity(new ParameterizedTypeReference<List<FileSystemAuthor>>() {
         }).get();
   }
 
   private void checkBooks() {
-    List<RedisBook> books = getBooks();
+    List<FileSystemBook> books = getBooks();
     assertThat(books.size()).isEqualTo(3);
     assertTrue(books.stream().anyMatch(
         book -> "Effective Java".equals(book.getTitle())
@@ -130,10 +128,10 @@ class TestGraphQlResolvers {
             && AUTHOR_ID_2.equals(book.getAuthor().getId())));
   }
 
-  private List<RedisBook> getBooks() {
+  private List<FileSystemBook> getBooks() {
     String query = "query { books { title author { id } } }";
     return graphQlTester.document(query).execute().path("data.books")
-        .entity(new ParameterizedTypeReference<List<RedisBook>>() {
+        .entity(new ParameterizedTypeReference<List<FileSystemBook>>() {
         }).get();
   }
 
@@ -170,17 +168,17 @@ class TestGraphQlResolvers {
   @Test
   @Order(5)
   void checkSingleAuthor() {
-    RedisAuthor author = getAuthorById(AUTHOR_ID_2);
+    FileSystemAuthor author = getAuthorById(AUTHOR_ID_2);
     assertThat(author.getFirstName()).isEqualTo("John");
     assertThat(author.getLastName()).isEqualTo("Doe");
     assertThat(author.getPublishedBookIds().size()).isEqualTo(2);
   }
 
-  private RedisAuthor getAuthorById(Long id) {
+  private FileSystemAuthor getAuthorById(Long id) {
     String query = String.format(
         "query { authorById(id: \"%s\") { firstName lastName publishedBookIds } }", id);
     return graphQlTester.document(query).execute().path("data.authorById")
-        .entity(new ParameterizedTypeReference<RedisAuthor>() {
+        .entity(new ParameterizedTypeReference<FileSystemAuthor>() {
         }).get();
   }
 
@@ -195,7 +193,7 @@ class TestGraphQlResolvers {
   @Test
   @Order(7)
   void checkSingleBook() {
-    RedisBook book = getBookById(BOOK_ID_1);
+    FileSystemBook book = getBookById(BOOK_ID_1);
     assertThat(book.getTitle()).isEqualTo("Effective Java");
     assertThat(book.getPublishedYear()).isEqualTo(2000);
     Author author = book.getAuthor();
@@ -203,11 +201,11 @@ class TestGraphQlResolvers {
     assertThat(author.getLastName()).isEqualTo("Bloch");
   }
 
-  private RedisBook getBookById(Long id) {
+  private FileSystemBook getBookById(Long id) {
     String query = String.format(
         "query { bookById(id: \"%s\") { title publishedYear author { firstName lastName } } }", id);
     return graphQlTester.document(query).execute().path("data.bookById")
-        .entity(new ParameterizedTypeReference<RedisBook>() {
+        .entity(new ParameterizedTypeReference<FileSystemBook>() {
         }).get();
   }
 
@@ -250,7 +248,7 @@ class TestGraphQlResolvers {
         }).get();
     assertThat(isDeleted).isTrue();
     assertThat(getBooks().size()).isEqualTo(1);
-    RedisAuthor author = getAuthorById(AUTHOR_ID_2);
+    FileSystemAuthor author = getAuthorById(AUTHOR_ID_2);
     assertThat(author.getPublishedBookIds().size()).isEqualTo(1);
   }
 
