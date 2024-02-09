@@ -27,6 +27,15 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
+
+    <!-- Access AbstractGraphQlTest.class from the server module for testing purposes. -->
+    <dependency>
+      <groupId>org.example.graphql</groupId>
+      <artifactId>server</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
