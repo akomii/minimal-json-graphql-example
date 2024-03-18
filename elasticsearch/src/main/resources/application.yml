@@ -1,0 +1,5 @@
+spring:
+  data:
+    elasticsearch:
+      cluster-nodes: localhost:9200
+      cluster-name: elasticsearch
