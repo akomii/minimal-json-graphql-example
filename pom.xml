@@ -13,6 +13,7 @@
     <module>server</module>
     <module>redis</module>
     <module>filesystem</module>
+    <module>elasticsearch</module>
   </modules>
 
   <parent>
