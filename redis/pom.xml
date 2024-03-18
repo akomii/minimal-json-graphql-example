@@ -21,8 +21,8 @@
       <version>1.0-SNAPSHOT</version>
     </dependency>
 
-    <!-- Spring Data Redis: Module of Spring Data that provides abstractions for the integration
-         between Spring and Redis, including connection, serialization/deserialization, and repository support. -->
+    <!-- Module of Spring Data that provides abstractions for the integration between Spring and Redis, including connection,
+    serialization/deserialization, and repository support. -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>

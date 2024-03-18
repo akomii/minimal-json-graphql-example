@@ -35,6 +35,12 @@ import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureG
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 
+/**
+ * A concrete implementation of {@link AbstractGraphQlTest} tailored for testing GraphQL operations within a file system-based environment. It
+ * overrides abstract methods from {@link AbstractGraphQlTest} to fetch and manipulate {@link FileSystemAuthor} and {@link FileSystemBook} entities
+ * through GraphQL queries and mutations, ensuring that the GraphQL schema and resolvers function as expected when interacting with a file system
+ * storage.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = MyApp.class)
 @AutoConfigureGraphQlTester
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

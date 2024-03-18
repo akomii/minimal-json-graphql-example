@@ -30,8 +30,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * <p>The MyApp class is the entry point for the Spring Boot application. It uses the
- * {@link SpringBootApplication} annotation, which is a convenience annotation that adds all of the
- * following:</p>
+ * {@link SpringBootApplication} annotation, which is a convenience annotation that adds all of the following:</p>
  * <ul>
  * <li>{@link org.springframework.context.annotation.Configuration}: Tags the class as a source of bean definitions for the application
  * context.</li>
