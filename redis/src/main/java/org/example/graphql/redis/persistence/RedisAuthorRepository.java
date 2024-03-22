@@ -40,6 +40,6 @@ import org.springframework.stereotype.Repository;
  * @since 08-01-2024
  */
 @Repository
-public interface AuthorRepository extends KeyValueRepository<RedisAuthor, Long> {
+public interface RedisAuthorRepository extends KeyValueRepository<RedisAuthor, Long> {
 
 }

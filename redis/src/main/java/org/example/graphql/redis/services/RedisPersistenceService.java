@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.example.graphql.redis.models.RedisAuthor;
 import org.example.graphql.redis.models.RedisBook;
-import org.example.graphql.redis.persistence.AuthorRepository;
-import org.example.graphql.redis.persistence.BookRepository;
+import org.example.graphql.redis.persistence.RedisAuthorRepository;
+import org.example.graphql.redis.persistence.RedisBookRepository;
 import org.example.graphql.server.models.Author;
 import org.example.graphql.server.models.Book;
 import org.example.graphql.server.services.BasicPersistenceService;
@@ -42,7 +42,7 @@ import org.springframework.stereotype.Service;
  * <p>
  * This class implements the {@link BasicPersistenceService} interface and overrides its methods to
  * perform CRUD operations on {@link RedisAuthor} and {@link RedisBook} instances. It uses
- * {@link AuthorRepository} and {@link BookRepository} to interact with the database. It is
+ * {@link RedisAuthorRepository} and {@link RedisBookRepository} to interact with the database. It is
  * annotated with {@link Service} to indicate that it is a Spring service.
  *
  * @author Alexander Kombeiz
@@ -52,62 +52,62 @@ import org.springframework.stereotype.Service;
 @Service
 public class RedisPersistenceService implements BasicPersistenceService {
 
-  private final AuthorRepository authorRepository;
+  private final RedisAuthorRepository redisAuthorRepository;
 
-  private final BookRepository bookRepository;
+  private final RedisBookRepository redisBookRepository;
 
   /**
-   * Constructs a new {@link RedisPersistenceService} with the given {@link AuthorRepository} and
-   * {@link BookRepository}.
+   * Constructs a new {@link RedisPersistenceService} with the given {@link RedisAuthorRepository} and
+   * {@link RedisBookRepository}.
    *
-   * @param authorRepository the repository to use for {@link RedisAuthor} instances
-   * @param bookRepository   the repository to use for {@link RedisBook} instances
+   * @param redisAuthorRepository the repository to use for {@link RedisAuthor} instances
+   * @param redisBookRepository   the repository to use for {@link RedisBook} instances
    */
   @Autowired
-  public RedisPersistenceService(AuthorRepository authorRepository, BookRepository bookRepository) {
-    this.authorRepository = authorRepository;
-    this.bookRepository = bookRepository;
+  public RedisPersistenceService(RedisAuthorRepository redisAuthorRepository, RedisBookRepository redisBookRepository) {
+    this.redisAuthorRepository = redisAuthorRepository;
+    this.redisBookRepository = redisBookRepository;
   }
 
   @Override
   public Author getAuthorById(Long id) {
-    return authorRepository.findById(id).orElse(null);
+    return redisAuthorRepository.findById(id).orElse(null);
   }
 
   @Override
   public List<Author> getAllAuthors() {
-    List<RedisAuthor> redisAuthors = authorRepository.findAll();
+    List<RedisAuthor> redisAuthors = redisAuthorRepository.findAll();
     return new ArrayList<>(redisAuthors);
   }
 
   @Override
   public Author persistAuthor(Author author) {
-    return authorRepository.save((RedisAuthor) author);
+    return redisAuthorRepository.save((RedisAuthor) author);
   }
 
   @Override
   public void deleteAuthorById(Long id) {
-    authorRepository.deleteById(id);
+    redisAuthorRepository.deleteById(id);
   }
 
   @Override
   public Book getBookById(Long id) {
-    return bookRepository.findById(id).orElse(null);
+    return redisBookRepository.findById(id).orElse(null);
   }
 
   @Override
   public List<Book> getAllBooks() {
-    List<RedisBook> redisBooks = bookRepository.findAll();
+    List<RedisBook> redisBooks = redisBookRepository.findAll();
     return new ArrayList<>(redisBooks);
   }
 
   @Override
   public Book persistBook(Book book) {
-    return bookRepository.save((RedisBook) book);
+    return redisBookRepository.save((RedisBook) book);
   }
 
   @Override
   public void deleteBookById(Long id) {
-    bookRepository.deleteById(id);
+    redisBookRepository.deleteById(id);
   }
 }
