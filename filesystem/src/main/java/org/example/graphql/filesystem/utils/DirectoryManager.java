@@ -31,18 +31,16 @@ import java.util.Objects;
 import lombok.Getter;
 
 /**
- * Manages a specified working directory for file storage and operations within the application.
- * This class is responsible for ensuring the existence of the working directory and provides
- * utility methods for constructing file paths within this directory.
+ * Manages a specified working directory for file storage and operations within the application. This class is responsible for ensuring the existence
+ * of the working directory and provides utility methods for constructing file paths within this directory.
  * <p>
- * The working directory path is provided at construction and is immediately converted to an
- * absolute and normalized {@link Path}. If the specified directory does not exist, it is created
- * during the initialization phase.
+ * The working directory path is provided at construction and is immediately converted to an absolute and normalized {@link Path}. If the specified
+ * directory does not exist, it is created during the initialization phase.
  * </p>
  *
  * @author Alexander Kombeiz
  * @version 1.0
- * @since 2024-02-02
+ * @since 02-02-2024
  */
 @Getter
 public class DirectoryManager {
@@ -55,8 +53,8 @@ public class DirectoryManager {
   }
 
   /**
-   * Validates and ensures the existence of the working directory. If the directory does not exist,
-   * it attempts to create it. Throws a RuntimeException if unable to create the directory.
+   * Validates and ensures the existence of the working directory. If the directory does not exist, it attempts to create it. Throws a
+   * RuntimeException if unable to create the directory.
    *
    * @throws RuntimeException if the directory cannot be created or the path is null.
    */

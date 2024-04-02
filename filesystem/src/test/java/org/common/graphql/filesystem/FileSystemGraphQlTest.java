@@ -51,34 +51,28 @@ public class FileSystemGraphQlTest extends AbstractGraphQlTest<FileSystemAuthor,
   @Override
   protected List<FileSystemAuthor> fetchAuthors() {
     String query = "query { authors { firstName lastName publishedBookIds } }";
-    return graphQlTester.document(query).execute().path("data.authors")
-        .entity(new ParameterizedTypeReference<List<FileSystemAuthor>>() {
-        }).get();
+    return graphQlTester.document(query).execute().path("data.authors").entity(new ParameterizedTypeReference<List<FileSystemAuthor>>() {
+    }).get();
   }
 
   @Override
   protected List<FileSystemBook> fetchBooks() {
     String query = "query { books { title author { id } } }";
-    return graphQlTester.document(query).execute().path("data.books")
-        .entity(new ParameterizedTypeReference<List<FileSystemBook>>() {
-        }).get();
+    return graphQlTester.document(query).execute().path("data.books").entity(new ParameterizedTypeReference<List<FileSystemBook>>() {
+    }).get();
   }
 
   @Override
   protected FileSystemAuthor getAuthorById(Long id) {
-    String query = String.format(
-        "query { authorById(id: \"%s\") { firstName lastName publishedBookIds } }", id);
-    return graphQlTester.document(query).execute().path("data.authorById")
-        .entity(new ParameterizedTypeReference<FileSystemAuthor>() {
-        }).get();
+    String query = String.format("query { authorById(id: \"%s\") { firstName lastName publishedBookIds } }", id);
+    return graphQlTester.document(query).execute().path("data.authorById").entity(new ParameterizedTypeReference<FileSystemAuthor>() {
+    }).get();
   }
 
   @Override
   protected FileSystemBook getBookById(Long id) {
-    String query = String.format(
-        "query { bookById(id: \"%s\") { title publishedYear author { firstName lastName } } }", id);
-    return graphQlTester.document(query).execute().path("data.bookById")
-        .entity(new ParameterizedTypeReference<FileSystemBook>() {
-        }).get();
+    String query = String.format("query { bookById(id: \"%s\") { title publishedYear author { firstName lastName } } }", id);
+    return graphQlTester.document(query).execute().path("data.bookById").entity(new ParameterizedTypeReference<FileSystemBook>() {
+    }).get();
   }
 }

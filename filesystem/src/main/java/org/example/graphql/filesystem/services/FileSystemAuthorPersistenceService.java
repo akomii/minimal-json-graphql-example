@@ -27,74 +27,47 @@ package org.example.graphql.filesystem.services;
 import java.util.ArrayList;
 import java.util.List;
 import org.example.graphql.filesystem.models.FileSystemAuthor;
-import org.example.graphql.filesystem.models.FileSystemBook;
 import org.example.graphql.filesystem.persistence.FileSystemStorage;
 import org.example.graphql.server.models.Author;
-import org.example.graphql.server.models.Book;
-import org.example.graphql.server.services.BasicPersistenceService;
+import org.example.graphql.server.services.AuthorPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Service layer for persisting and retrieving Author and Book entities using file system storage.
- * This class leverages {@link FileSystemStorage} for CRUD operations on {@link FileSystemAuthor}
- * and {@link FileSystemBook} entities, providing a concrete implementation of
- * {@link BasicPersistenceService}.
+ * Service layer for persisting and retrieving {@link Author} entities using file system storage. Provides concrete implementation of
+ * {@link AuthorPersistenceService} for {@link FileSystemAuthor}.
  *
  * @author Alexander Kombeiz
- * @version 1.0
- * @since 2024-05-02
+ * @version 1.01
+ * @since 05-02-2024
  */
 @Service
-public class FileSystemPersistenceService implements BasicPersistenceService {
+public class FileSystemAuthorPersistenceService implements AuthorPersistenceService {
 
   private final FileSystemStorage<FileSystemAuthor> authorStorage;
-  private final FileSystemStorage<FileSystemBook> bookStorage;
 
   @Autowired
-  public FileSystemPersistenceService(FileSystemStorage<FileSystemAuthor> authorStorage,
-      FileSystemStorage<FileSystemBook> bookStorage) {
+  public FileSystemAuthorPersistenceService(FileSystemStorage<FileSystemAuthor> authorStorage) {
     this.authorStorage = authorStorage;
-    this.bookStorage = bookStorage;
   }
 
   @Override
-  public Author getAuthorById(Long id) {
+  public Author getById(Long id) {
     return authorStorage.getById(id);
   }
 
   @Override
-  public List<Author> getAllAuthors() {
+  public List<Author> getAll() {
     return new ArrayList<>(authorStorage.getAll());
   }
 
   @Override
-  public Author persistAuthor(Author author) {
+  public Author persist(Author author) {
     return authorStorage.save((FileSystemAuthor) author);
   }
 
   @Override
-  public void deleteAuthorById(Long id) {
+  public void deleteById(Long id) {
     authorStorage.deleteById(id);
-  }
-
-  @Override
-  public Book getBookById(Long id) {
-    return bookStorage.getById(id);
-  }
-
-  @Override
-  public List<Book> getAllBooks() {
-    return new ArrayList<>(bookStorage.getAll());
-  }
-
-  @Override
-  public Book persistBook(Book book) {
-    return bookStorage.save((FileSystemBook) book);
-  }
-
-  @Override
-  public void deleteBookById(Long id) {
-    bookStorage.deleteById(id);
   }
 }

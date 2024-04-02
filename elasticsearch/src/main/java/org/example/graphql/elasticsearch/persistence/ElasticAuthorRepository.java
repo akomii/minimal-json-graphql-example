@@ -22,37 +22,23 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.filesystem.models;
+package org.example.graphql.elasticsearch.persistence;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
-import org.example.graphql.server.models.Author;
-import org.example.graphql.server.models.Book;
+import org.example.graphql.elasticsearch.models.ElasticAuthor;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.stereotype.Repository;
 
 /**
- * Represents a book within a file system-based storage mechanism. This class extends {@link AbstractPersistentObject} to inherit common persistence
- * properties and implements the {@link Book} interface to provide book-specific attributes and behavior.
+ * Elasticsearch repository interface for {@link ElasticAuthor} entities.
  * <p>
- * This class encapsulates data for books, including title, publication year, and a reference to the {@link Author} of the book. It is designed to be
- * used in contexts where books are managed and stored in a file system.
- * </p>
+ * Extends {@link ElasticsearchRepository} to provide CRUD operations and Elasticsearch-specific functionality for {@link ElasticAuthor} entities,
+ * using {@link Long} as the ID type.
  *
  * @author Alexander Kombeiz
  * @version 1.0
- * @since 02-02-2024
+ * @since 18-03-2024
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class FileSystemBook extends AbstractPersistentObject implements Book {
+@Repository
+public interface ElasticAuthorRepository extends ElasticsearchRepository<ElasticAuthor, Long> {
 
-  String title;
-
-  int publishedYear;
-
-  Author author;
 }

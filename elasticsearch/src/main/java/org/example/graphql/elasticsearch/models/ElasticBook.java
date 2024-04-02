@@ -26,24 +26,34 @@ package org.example.graphql.elasticsearch.models;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.example.graphql.elasticsearch.utils.IdGenerator;
 import org.example.graphql.server.models.Author;
 import org.example.graphql.server.models.Book;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+/**
+ * Represents a {@link Book} entity for Elasticsearch storage.
+ * <p>
+ * This class is annotated with {@link Document} to define it as an Elasticsearch document with a specified index name. It implements the {@link Book}
+ * interface and uses annotations like {@link Getter} and {@link Setter} from Project Lombok to auto-generate getter and setter methods. The
+ * {@link FieldDefaults} annotation sets the access level of class fields to private.
+ * <p>
+ * The default constructor generates a unique ID for the {@link ElasticBook}, suitable for use with Elasticsearch which typically uses string UUIDs.
+ * This is handled by a custom ID generator for demonstration purposes.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 18-03-2024
+ */
 @Document(indexName = "books")
-@NoArgsConstructor
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ElasticBook implements Book {
 
-  /**
-   * The unique identifier for the book.
-   */
   @Id
   Long id;
 
@@ -52,4 +62,8 @@ public class ElasticBook implements Book {
   int publishedYear;
 
   Author author;
+
+  public ElasticBook() {
+    this.id = IdGenerator.generateUniqueId(ElasticBook.class.getName());
+  }
 }

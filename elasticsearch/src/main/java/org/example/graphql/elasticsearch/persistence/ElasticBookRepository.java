@@ -22,25 +22,23 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.elasticsearch.factories;
+package org.example.graphql.elasticsearch.persistence;
 
-import org.example.graphql.elasticsearch.models.ElasticAuthor;
 import org.example.graphql.elasticsearch.models.ElasticBook;
-import org.example.graphql.server.factories.BasicFactory;
-import org.example.graphql.server.models.Author;
-import org.example.graphql.server.models.Book;
-import org.springframework.stereotype.Component;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.stereotype.Repository;
 
-@Component
-public class ElasticFactory implements BasicFactory {
+/**
+ * Elasticsearch repository interface for {@link ElasticBook} entities.
+ * <p>
+ * Extends {@link ElasticsearchRepository} to provide CRUD operations and Elasticsearch-specific functionality for {@link ElasticBook} entities, using
+ * {@link Long} as the ID type.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 18-03-2024
+ */
+@Repository
+public interface ElasticBookRepository extends ElasticsearchRepository<ElasticBook, Long> {
 
-  @Override
-  public Author createAuthor() {
-    return new ElasticAuthor();
-  }
-
-  @Override
-  public Book createBook() {
-    return new ElasticBook();
-  }
 }

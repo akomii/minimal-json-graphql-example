@@ -22,13 +22,38 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.elasticsearch.persistence;
+package org.example.graphql.elasticsearch.utils;
 
-import org.example.graphql.elasticsearch.models.ElasticBook;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Repository;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
-@Repository
-public interface BookRepository extends ElasticsearchRepository<ElasticBook, Long> {
+/**
+ * Utility class for generating unique identifiers in a sequence.
+ * <p>
+ * Uses a concurrent map to maintain a counter for each sequence name, ensuring thread-safe unique ID generation.
+ * </p>
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 18-03-2024
+ */
+public class IdGenerator {
 
+  private static final Map<String, AtomicLong> counters = new ConcurrentHashMap<>();
+
+  // Private constructor to prevent instantiation
+  private IdGenerator() {
+  }
+
+  /**
+   * Generates and returns a unique ID for the specified sequence name.
+   *
+   * @param sequenceName the name of the sequence for which to generate a unique ID
+   * @return a unique long value incremented for each call per sequence name
+   */
+  public static Long generateUniqueId(String sequenceName) {
+    AtomicLong counter = counters.computeIfAbsent(sequenceName, k -> new AtomicLong());
+    return counter.incrementAndGet();
+  }
 }

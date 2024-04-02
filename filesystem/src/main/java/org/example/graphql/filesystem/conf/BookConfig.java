@@ -34,12 +34,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Spring configuration class for {@link FileSystemBook}-related beans. This class configures the
- * beans necessary for managing books within the filesystem, including their storage, ID generation,
- * and directory management.
+ * Spring configuration class for {@link FileSystemBook}-related beans. This class configures the beans necessary for managing books within the
+ * filesystem, including their storage, ID generation, and directory management.
  * <p>
- * The working directory for book data storage is configurable through application properties,
- * allowing for flexibility in the storage location.
+ * The working directory for book data storage is configurable through application properties, allowing for flexibility in the storage location.
  * </p>
  *
  * @author Alexander Kombeiz
@@ -53,9 +51,8 @@ public class BookConfig {
   private String workingDir;
 
   /**
-   * Creates and configures a {@link DirectoryManager} bean for managing the directory where book
-   * data is stored. The working directory path is determined by application properties, with a
-   * default fallback to "/tmp/books".
+   * Creates and configures a {@link DirectoryManager} bean for managing the directory where book data is stored. The working directory path is
+   * determined by application properties, with a default fallback to "/tmp/books".
    *
    * @return A {@link DirectoryManager} instance dedicated to book data management.
    */
@@ -65,9 +62,8 @@ public class BookConfig {
   }
 
   /**
-   * Provides a {@link IdGenerator} bean specifically for book entity ID generation. Utilizes the
-   * {@link DirectoryManager} bean for directory management to ensure unique ID generation is
-   * aligned with the file system storage strategy for books.
+   * Provides a {@link IdGenerator} bean specifically for book entity ID generation. Utilizes the {@link DirectoryManager} bean for directory
+   * management to ensure unique ID generation is aligned with the file system storage strategy for books.
    *
    * @return An {@link IdGenerator} instance for book entities.
    */
@@ -77,9 +73,8 @@ public class BookConfig {
   }
 
   /**
-   * Configures a {@link FileSystemStorage} bean for {@link FileSystemBook} entities, integrating
-   * directory management and ID generation services for comprehensive storage management. This bean
-   * is essential for persisting book data within the filesystem.
+   * Configures a {@link FileSystemStorage} bean for {@link FileSystemBook} entities, integrating directory management and ID generation services for
+   * comprehensive storage management. This bean is essential for persisting book data within the filesystem.
    *
    * @return A {@link FileSystemStorage} instance tailored for {@link FileSystemBook} entities.
    */

@@ -22,32 +22,52 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.filesystem.factories;
+package org.example.graphql.filesystem.services;
 
-import org.example.graphql.filesystem.models.FileSystemAuthor;
+import java.util.ArrayList;
+import java.util.List;
 import org.example.graphql.filesystem.models.FileSystemBook;
-import org.example.graphql.server.factories.BasicFactory;
-import org.example.graphql.server.models.Author;
+import org.example.graphql.filesystem.persistence.FileSystemStorage;
 import org.example.graphql.server.models.Book;
-import org.springframework.stereotype.Component;
+import org.example.graphql.server.services.BookPersistenceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
- * Factory class for creating {@link FileSystemAuthor} and {@link FileSystemBook} instances.
+ * Service layer for persisting and retrieving {@link Book} entities using file system storage. Provides concrete implementation of
+ * {@link BookPersistenceService} for {@link FileSystemBook}.
  *
  * @author Alexander Kombeiz
- * @version 1.0
- * @since 15-01-2024
+ * @version 1.01
+ * @since 05-02-2024
  */
-@Component
-public class FileSystemFactory implements BasicFactory {
+@Service
+public class FileSystemBookPersistenceService implements BookPersistenceService {
 
-  @Override
-  public Author createAuthor() {
-    return new FileSystemAuthor();
+  private final FileSystemStorage<FileSystemBook> bookStorage;
+
+  @Autowired
+  public FileSystemBookPersistenceService(FileSystemStorage<FileSystemBook> bookStorage) {
+    this.bookStorage = bookStorage;
   }
 
   @Override
-  public Book createBook() {
-    return new FileSystemBook();
+  public Book getById(Long id) {
+    return bookStorage.getById(id);
+  }
+
+  @Override
+  public List<Book> getAll() {
+    return new ArrayList<>(bookStorage.getAll());
+  }
+
+  @Override
+  public Book persist(Book author) {
+    return bookStorage.save((FileSystemBook) author);
+  }
+
+  @Override
+  public void deleteById(Long id) {
+    bookStorage.deleteById(id);
   }
 }

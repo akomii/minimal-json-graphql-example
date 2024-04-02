@@ -34,17 +34,16 @@ import lombok.experimental.FieldDefaults;
 import org.example.graphql.server.models.Author;
 
 /**
- * Represents an author in a file system-based storage mechanism. This class extends
- * {@link AbstractPersistentObject} to inherit common persistence properties and implements the
- * {@link Author} interface to fulfill author-specific behaviors.
+ * Represents an author in a file system-based storage mechanism. This class extends {@link AbstractPersistentObject} to inherit common persistence
+ * properties and implements the {@link Author} interface to fulfill author-specific behaviors.
  * <p>
- * This class manages the author's basic information and a list of IDs of published books,
- * supporting operations to add or remove books from an author's bibliography.
+ * This class manages the author's basic information and a list of IDs of published books, supporting operations to add or remove books from an
+ * author's bibliography.
  * </p>
  *
  * @author Alexander Kombeiz
  * @version 1.0
- * @since 2024-02-02
+ * @since 02-02-2024
  */
 @NoArgsConstructor
 @Getter

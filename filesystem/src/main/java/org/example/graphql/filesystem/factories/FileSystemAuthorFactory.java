@@ -22,37 +22,26 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.filesystem.models;
+package org.example.graphql.filesystem.factories;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
+import org.example.graphql.filesystem.models.FileSystemAuthor;
+import org.example.graphql.server.factories.AuthorFactory;
 import org.example.graphql.server.models.Author;
-import org.example.graphql.server.models.Book;
+import org.springframework.stereotype.Component;
 
 /**
- * Represents a book within a file system-based storage mechanism. This class extends {@link AbstractPersistentObject} to inherit common persistence
- * properties and implements the {@link Book} interface to provide book-specific attributes and behavior.
- * <p>
- * This class encapsulates data for books, including title, publication year, and a reference to the {@link Author} of the book. It is designed to be
- * used in contexts where books are managed and stored in a file system.
- * </p>
+ * This factory implements the {@link AuthorFactory} interface to create {@link FileSystemAuthor} objects.
  *
  * @author Alexander Kombeiz
  * @version 1.0
  * @since 02-02-2024
  */
-@NoArgsConstructor
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class FileSystemBook extends AbstractPersistentObject implements Book {
+@Component
+public class FileSystemAuthorFactory implements AuthorFactory {
 
-  String title;
-
-  int publishedYear;
-
-  Author author;
+  @Override
+  public Author create() {
+    return new FileSystemAuthor();
+  }
 }
+

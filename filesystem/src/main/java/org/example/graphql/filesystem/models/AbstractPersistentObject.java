@@ -30,22 +30,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Abstract base class for entities to provide common properties and functionality. This class
- * provides a framework for defining persistent objects with a unique identifier. It implements
- * {@link Serializable} to allow objects of subclasses to be serialized, ensuring that class
- * definition changes are compatible with serialized forms.
+ * Abstract base class for entities to provide common properties and functionality. This class provides a framework for defining persistent objects
+ * with a unique identifier. It implements {@link Serializable} to allow objects of subclasses to be serialized, ensuring that class definition
+ * changes are compatible with serialized forms.
  *
  * @author Alexander Kombeiz
  * @version 1.0
- * @since 2024-02-02
+ * @since 02-02-2024
  */
 @Getter
 @Setter
 public abstract class AbstractPersistentObject implements Serializable {
 
-  /**
-   * The unique identifier for the serialized class.
-   */
   @Serial
   private static final long serialVersionUID = 1L;
 

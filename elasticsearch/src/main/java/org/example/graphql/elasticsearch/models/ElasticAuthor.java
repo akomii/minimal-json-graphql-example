@@ -28,23 +28,33 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.example.graphql.elasticsearch.utils.IdGenerator;
 import org.example.graphql.server.models.Author;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+/**
+ * Represents a {@link Author} entity for Elasticsearch storage.
+ * <p>
+ * This class is annotated with {@link Document} to define it as an Elasticsearch document with a specified index name. It implements the
+ * {@link Author} interface and uses annotations like {@link Getter} and {@link Setter} from Project Lombok to auto-generate getter and setter
+ * methods. The {@link FieldDefaults} annotation sets the access level of class fields to private.
+ * <p>
+ * The default constructor generates a unique ID for the {@link ElasticAuthor}, suitable for use with Elasticsearch which typically uses string UUIDs.
+ * This is handled by a custom ID generator for demonstration purposes.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 18-03-2024
+ */
 @Document(indexName = "authors")
-@NoArgsConstructor
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ElasticAuthor implements Author {
 
-  /**
-   * The unique identifier for the author.
-   */
   @Id
   Long id;
 
@@ -62,5 +72,9 @@ public class ElasticAuthor implements Author {
   @Override
   public void removePublishedBook(Long id) {
     publishedBookIds.remove(id);
+  }
+
+  public ElasticAuthor() {
+    this.id = IdGenerator.generateUniqueId(ElasticAuthor.class.getName());
   }
 }

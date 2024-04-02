@@ -22,13 +22,25 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.elasticsearch.persistence;
+package org.example.graphql.elasticsearch.factories;
 
 import org.example.graphql.elasticsearch.models.ElasticAuthor;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Repository;
+import org.example.graphql.server.factories.AuthorFactory;
+import org.example.graphql.server.models.Author;
+import org.springframework.stereotype.Component;
 
-@Repository
-public interface AuthorRepository extends ElasticsearchRepository<ElasticAuthor, Long> {
+/**
+ * This factory implements the {@link AuthorFactory} interface to create {@link ElasticAuthor} objects.
+ *
+ * @author Alexander Kombeiz
+ * @version 1.0
+ * @since 18-03-2024
+ */
+@Component
+public class ElasticAuthorFactory implements AuthorFactory {
 
+  @Override
+  public Author create() {
+    return new ElasticAuthor();
+  }
 }
