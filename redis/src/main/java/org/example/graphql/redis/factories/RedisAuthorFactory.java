@@ -25,33 +25,22 @@
 package org.example.graphql.redis.factories;
 
 import org.example.graphql.redis.models.RedisAuthor;
-import org.example.graphql.redis.models.RedisBook;
-import org.example.graphql.server.factories.BasicFactory;
+import org.example.graphql.server.factories.AuthorFactory;
 import org.example.graphql.server.models.Author;
-import org.example.graphql.server.models.Book;
 import org.springframework.stereotype.Component;
 
 /**
- * Factory class for creating {@link RedisAuthor} and {@link RedisBook} instances.
- * <p>
- * This class implements the {@link BasicFactory} interface and overrides its methods to create
- * {@link RedisAuthor} and {@link RedisBook} instances. It is annotated with {@link Component} to
- * indicate that it is a Spring component.
+ * This factory implements the {@link AuthorFactory} interface to create {@link RedisAuthor} objects.
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.01
  * @since 08-01-2024
  */
 @Component
-public class RedisFactory implements BasicFactory {
+public class RedisAuthorFactory implements AuthorFactory {
 
   @Override
-  public Author createAuthor() {
+  public Author create() {
     return new RedisAuthor();
-  }
-
-  @Override
-  public Book createBook() {
-    return new RedisBook();
   }
 }

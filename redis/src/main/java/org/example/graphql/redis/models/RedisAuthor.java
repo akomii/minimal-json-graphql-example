@@ -40,11 +40,10 @@ import org.springframework.data.redis.core.RedisHash;
 /**
  * Redis implementation of the {@link Author} interface.
  * <p>
- * This class represents an author stored in a Redis database. It includes fields for the author's
- * ID, first name, last name, and the IDs of the books they've published. It is annotated with
- * {@link RedisHash} to indicate that it is a Redis hash object, and with {@link NoArgsConstructor},
- * {@link Getter}, {@link Setter}, and {@link FieldDefaults} from Lombok to generate boilerplate
- * code.
+ * This class represents an author stored in a Redis database. It includes fields for the author's ID, first name, last name, and the IDs of the books
+ * they've published. It is annotated with {@link RedisHash} to indicate that it is a Redis hash object, and with {@link NoArgsConstructor},
+ * {@link Getter}, {@link Setter}, and {@link FieldDefaults} from Lombok to generate boilerplate code.
+ * </p>
  *
  * @author Alexander Kombeiz
  * @version 1.02
@@ -57,15 +56,9 @@ import org.springframework.data.redis.core.RedisHash;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RedisAuthor implements Author, Serializable {
 
-  /**
-   * The unique identifier for the serialized class.
-   */
   @Serial
   private static final long serialVersionUID = 1L;
 
-  /**
-   * The unique identifier for the author.
-   */
   @Id
   Long id;
 

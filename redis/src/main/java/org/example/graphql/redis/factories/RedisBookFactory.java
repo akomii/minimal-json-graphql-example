@@ -22,30 +22,25 @@
  * SOFTWARE.
  */
 
-package org.example.graphql.redis;
+package org.example.graphql.redis.factories;
 
-import java.time.Duration;
-import org.testcontainers.containers.FixedHostPortGenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
+import org.example.graphql.redis.models.RedisBook;
+import org.example.graphql.server.factories.BookFactory;
+import org.example.graphql.server.models.Book;
+import org.springframework.stereotype.Component;
 
 /**
- * RedisContainer is a custom Testcontainers configuration for a Redis container. It extends FixedHostPortGenericContainer to bind a fixed port for
- * the Redis server. This class is used to create a Redis container for integration tests.
+ * This factory implements the {@link BookFactory} interface to create {@link RedisBook} objects.
  *
- * @see FixedHostPortGenericContainer
+ * @author Alexander Kombeiz
+ * @version 1.01
+ * @since 08-01-2024
  */
-public class RedisContainer extends FixedHostPortGenericContainer<RedisContainer> {
+@Component
+public class RedisBookFactory implements BookFactory {
 
-  private static final int REDIS_PORT = 6379;
-  private static final String REDIS_IMAGE = "redis:7.2.3";
-
-  /**
-   * Constructs a new RedisContainer with the default Redis image and port. It waits for the Redis server to start listening on the specified port,
-   * with a timeout of 1 minute.
-   */
-  public RedisContainer() {
-    super(REDIS_IMAGE);
-    withFixedExposedPort(REDIS_PORT, REDIS_PORT);
-    waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofMinutes(1)));
+  @Override
+  public Book create() {
+    return new RedisBook();
   }
 }

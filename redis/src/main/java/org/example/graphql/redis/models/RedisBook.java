@@ -40,12 +40,11 @@ import org.springframework.data.redis.core.RedisHash;
 /**
  * Redis implementation of the {@link Book} interface.
  * <p>
- * This class represents a book stored in a Redis database. It includes fields for the book's ID,
- * title, published year, and the author of the book. It is annotated with {@link RedisHash} to
- * indicate that it is a Redis hash object, and with {@link NoArgsConstructor}, {@link Getter},
- * {@link Setter}, and {@link FieldDefaults} from Lombok to generate boilerplate code. The author
- * field is annotated with {@link JsonDeserialize} to indicate that it should be deserialized as a
- * {@link RedisAuthor} object.
+ * This class represents a book stored in a Redis database. It includes fields for the book's ID, title, published year, and the author of the book.
+ * It is annotated with {@link RedisHash} to indicate that it is a Redis hash object, and with {@link NoArgsConstructor}, {@link Getter},
+ * {@link Setter}, and {@link FieldDefaults} from Lombok to generate boilerplate code. The author field is annotated with {@link JsonDeserialize} to
+ * indicate that it should be deserialized as a {@link RedisAuthor} object.
+ * </p>
  *
  * @author Alexander Kombeiz
  * @version 1.03
@@ -58,15 +57,9 @@ import org.springframework.data.redis.core.RedisHash;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RedisBook implements Book, Serializable {
 
-  /**
-   * The unique identifier for the serialized class.
-   */
   @Serial
   private static final long serialVersionUID = 1L;
 
-  /**
-   * The unique identifier for the book.
-   */
   @Id
   Long id;
 

@@ -29,11 +29,8 @@ import org.springframework.data.keyvalue.repository.KeyValueRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Repository interface for {@link RedisAuthor} instances.
- * <p>
- * This interface extends the {@link KeyValueRepository} interface from Spring Data Key Value to
- * provide CRUD operations for {@link RedisAuthor} instances. It is annotated with
- * {@link Repository} to indicate that it is a Spring Data repository.
+ * This interface extends the {@link KeyValueRepository} interface from Spring Data Key Value to provide CRUD operations for {@link RedisAuthor}
+ * instances.
  *
  * @author Alexander Kombeiz
  * @version 1.0

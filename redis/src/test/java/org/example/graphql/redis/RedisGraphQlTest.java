@@ -37,12 +37,10 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 /**
- * A concrete implementation of {@link AbstractGraphQlTest} tailored for testing GraphQL operations
- * within a Redis-based environment. This class leverages a Redis container to provide a realistic
- * testing context for author and book entities stored in Redis. It overrides abstract methods from
- * {@link AbstractGraphQlTest} to fetch and manipulate {@link RedisAuthor} and {@link RedisBook}
- * entities through GraphQL queries and mutations, ensuring that the GraphQL schema and resolvers
- * function as expected when interacting with Redis.
+ * A concrete implementation of {@link AbstractGraphQlTest} tailored for testing GraphQL operations within a Redis-based environment. This class
+ * leverages a Redis container to provide a realistic testing context for author and book entities stored in Redis. It overrides abstract methods from
+ * {@link AbstractGraphQlTest} to fetch and manipulate {@link RedisAuthor} and {@link RedisBook} entities through GraphQL queries and mutations,
+ * ensuring that the GraphQL schema and resolvers function as expected when interacting with Redis.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = MyApp.class)
 @AutoConfigureGraphQlTester
