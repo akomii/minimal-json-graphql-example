@@ -25,35 +25,26 @@
 package org.example.graphql.server.services;
 
 import java.util.List;
-import org.example.graphql.server.models.Author;
 import org.example.graphql.server.models.Book;
 
 /**
- * Interface for a service to interact with the persistence layer for {@link Author} and
- * {@link Book} instances.
+ * Service interface for managing persistence of {@link Book} instances.
  * <p>
- * This interface provides methods to fetch, persist, and delete {@link Author} and {@link Book}
- * instances by their ID. It also provides methods to fetch all authors and books.
+ * Provides methods to retrieve, save, and delete {@link Book} objects. Supports fetching an author by ID, getting all authors, persisting an author,
+ * and deleting an author by ID.
+ * </p>
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.01
  * @since 08-01-2024
  */
-public interface BasicPersistenceService {
+public interface BookPersistenceService {
 
-  Author getAuthorById(Long id);
+  Book getById(Long id);
 
-  List<Author> getAllAuthors();
+  List<Book> getAll();
 
-  Author persistAuthor(Author author);
+  Book persist(Book book);
 
-  void deleteAuthorById(Long id);
-
-  Book getBookById(Long id);
-
-  List<Book> getAllBooks();
-
-  Book persistBook(Book book);
-
-  void deleteBookById(Long id);
+  void deleteById(Long id);
 }

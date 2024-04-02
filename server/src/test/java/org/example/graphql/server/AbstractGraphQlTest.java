@@ -38,19 +38,15 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
 /**
- * Abstract base class for GraphQL integration tests, providing common setup and utility methods for
- * testing GraphQL operations.
+ * Abstract base class for GraphQL integration tests, providing common setup and utility methods for testing GraphQL operations.
  * <p>
- * Usage of this class involves extending it in a concrete test class and implementing the abstract
- * methods with logic for enabling the deserialization of GraphQL responses into specific entity
- * types. Java's type erasure removes generic type information at runtime, making it impossible for
- * Jackson to instantiate objects of generic types or interfaces directly from JSON responses.
+ * Usage of this class involves extending it in a concrete test class and implementing the abstract methods with logic for enabling the
+ * deserialization of GraphQL responses into specific entity types. Java's type erasure removes generic type information at runtime, making it
+ * impossible for Jackson to instantiate objects of generic types or interfaces directly from JSON responses.
  * </p>
  *
- * @param <A> the type parameter extending the {@link Author} interface, representing the author
- *            entity in the GraphQL schema.
- * @param <B> the type parameter extending the {@link Book} interface, representing the book entity
- *            in the GraphQL schema.
+ * @param <A> the type parameter extending the {@link Author} interface, representing the author entity in the GraphQL schema.
+ * @param <B> the type parameter extending the {@link Book} interface, representing the book entity in the GraphQL schema.
  */
 public abstract class AbstractGraphQlTest<A extends Author, B extends Book> {
 

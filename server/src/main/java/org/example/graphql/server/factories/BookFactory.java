@@ -24,23 +24,19 @@
 
 package org.example.graphql.server.factories;
 
-import org.example.graphql.server.models.Author;
 import org.example.graphql.server.models.Book;
 
 /**
- * Interface for a factory to create {@link Author} and {@link Book} instances.
+ * Factory interface for creating {@link Book} instances.
  * <p>
- * This interface provides methods to create new instances of an {@link Author} and a {@link Book}.
- * The implementation of this interface should handle the instantiation and initialization of the
- * {@link Author} and {@link Book}.
+ * Implementations of this interface should provide mechanisms for instantiating and initializing {@link Book} objects.
+ * </p>
  *
  * @author Alexander Kombeiz
- * @version 1.0
+ * @version 1.01
  * @since 08-01-2024
  */
-public interface BasicFactory {
+public interface BookFactory {
 
-  Author createAuthor();
-
-  Book createBook();
+  Book create();
 }

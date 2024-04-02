@@ -25,9 +25,11 @@
 package org.example.graphql.server.resolvers;
 
 import java.util.List;
-import org.example.graphql.server.factories.BasicFactory;
+import org.example.graphql.server.factories.AuthorFactory;
 import org.example.graphql.server.models.Author;
-import org.example.graphql.server.services.BasicPersistenceService;
+import org.example.graphql.server.models.Book;
+import org.example.graphql.server.services.AuthorPersistenceService;
+import org.example.graphql.server.services.BookPersistenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,18 +39,16 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 /**
- * Controller class for handling GraphQL queries and mutations related to {@link Author} instances.
+ * GraphQL controller for managing {@link Author} and related {@link Book} data.
  * <p>
- * This class provides methods to fetch an author by their ID, fetch all authors, create a new
- * author, and delete an author by their ID. It uses a {@link BasicPersistenceService} to interact
- * with the persistence layer and a {@link BasicFactory} to create new {@link Author} instances.
- * <p>
- * Each method is annotated with either {@link QueryMapping} or {@link MutationMapping} to indicate
- * whether it's a GraphQL query or mutation. The {@link Argument} annotation is used to specify the
- * arguments of the GraphQL query or mutation.
+ * Provides query and mutation operations for authors, including fetching, creating, and deleting authors and their books. Uses
+ * {@link AuthorPersistenceService} and {@link BookPersistenceService} for persistence operations and {@link AuthorFactory} for author creation.
+ * </p>
+ * Each method is annotated with either {@link QueryMapping} or {@link MutationMapping} to indicate whether it's a GraphQL query or mutation. The
+ * {@link Argument} annotation is used to specify the arguments of the GraphQL query or mutation.
  *
  * @author Alexander Kombeiz
- * @version 1.02
+ * @version 1.03
  * @since 04-01-2024
  */
 @Controller
@@ -56,85 +56,55 @@ public class AuthorResolver {
 
   private static final Logger log = LoggerFactory.getLogger(AuthorResolver.class);
 
-  private final BasicPersistenceService basicPersistenceService;
+  private final AuthorPersistenceService authorPersistenceService;
 
-  private final BasicFactory basicFactory;
+  private final BookPersistenceService bookPersistenceService;
 
-  /**
-   * Constructs a new {@link AuthorResolver} with the given {@link BasicPersistenceService} and
-   * {@link BasicFactory}.
-   *
-   * @param basicPersistenceService the {@link BasicPersistenceService} to use for interacting with
-   *                                the persistence layer.
-   * @param basicFactory            the {@link BasicFactory} to use for creating new {@link Author}
-   *                                instances.
-   */
+  private final AuthorFactory authorFactory;
+
   @Autowired
-  public AuthorResolver(BasicPersistenceService basicPersistenceService,
-      BasicFactory basicFactory) {
-    this.basicPersistenceService = basicPersistenceService;
-    this.basicFactory = basicFactory;
+  public AuthorResolver(AuthorPersistenceService authorPersistenceService,
+      BookPersistenceService bookPersistenceService,
+      AuthorFactory authorFactory) {
+    this.authorPersistenceService = authorPersistenceService;
+    this.bookPersistenceService = bookPersistenceService;
+    this.authorFactory = authorFactory;
   }
 
-  /**
-   * Fetches an author by their ID.
-   *
-   * @param id the ID of the author to fetch.
-   * @return the author with the given ID, or null if no such author exists.
-   */
   @QueryMapping
   public Author authorById(@Argument Long id) {
     log.info("Fetching author with id: {}", id);
-    return basicPersistenceService.getAuthorById(id);
+    return authorPersistenceService.getById(id);
   }
 
-  /**
-   * Fetches all authors.
-   *
-   * @return an iterable of all authors.
-   */
   @QueryMapping
   public List<Author> authors() {
     log.info("Fetching all authors");
-    return basicPersistenceService.getAllAuthors();
+    return authorPersistenceService.getAll();
   }
 
-  /**
-   * Creates a new author.
-   *
-   * @param firstName the first name of the author to create.
-   * @param lastName  the last name of the author to create.
-   * @return the created author.
-   */
   @MutationMapping
   public Author createAuthor(@Argument String firstName, @Argument String lastName) {
     log.info("Creating author with firstName: {} and lastName: {}", firstName, lastName);
-    Author newAuthor = basicFactory.createAuthor();
+    Author newAuthor = authorFactory.create();
     newAuthor.setFirstName(firstName);
     newAuthor.setLastName(lastName);
-    return basicPersistenceService.persistAuthor(newAuthor);
+    return authorPersistenceService.persist(newAuthor);
   }
 
   /**
-   * Deletes an author with the specified ID and associated books.
-   * <p>
-   * This method removes the specified author and all books associated with them. The deletion
-   * process includes removing each associated book from the persistence layer, ensuring the
-   * maintenance of a consistent dependency relationship between authors and books.
-   *
-   * @param id the ID of the author to delete.
-   * @return true if the author was deleted, false otherwise.
+   * Deletes an author by their ID and also deletes all books associated with that author.
    */
   @MutationMapping
   public Boolean deleteAuthor(@Argument Long id) {
     log.info("Deleting author with id: {}", id);
-    Author author = basicPersistenceService.getAuthorById(id);
+    Author author = authorPersistenceService.getById(id);
     if (author != null) {
       author.getPublishedBookIds().forEach(bookId -> {
         log.info("Deleting book with id: {} associated with author id: {}", bookId, id);
-        basicPersistenceService.deleteBookById(bookId);
+        bookPersistenceService.deleteById(bookId);
       });
-      basicPersistenceService.deleteAuthorById(id);
+      authorPersistenceService.getById(id);
       return true;
     } else {
       log.warn("Author with id {} not found.", id);
